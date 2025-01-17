@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Default directory to scan (change to your default directory if needed)
+SCAN_DIR="$HOME/.notes"
+actions=("New" "Edit" "Delete" "Quit")
+
+menu() {
+		
+    while true; do
+        action=$(printf "%s\n" "${actions[@]}" | tac | fzf --height=10% --border --prompt="Choose an action: ")
+
+        case $action in
+            New)
+                new_note
+                ;;
+            Edit)
+                edit_note
+                ;;
+            Delete)
+                delete_note
+                ;;
+            Quit)
+                break
+                ;;
+            *)
+                echo "Invalid action. Please choose new, edit, delete, or quit."
+                ;;
+        esac
+    done
+}
+
+menu
