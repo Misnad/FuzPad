@@ -2,31 +2,45 @@
 
 # Default directory to scan (change to your default directory if needed)
 SCAN_DIR="$HOME/.notes"
-actions=("New" "Edit" "Delete" "Quit")
+actions=("New note" "Open note" "Search" "Delete note" "Quit")
+current_date_time=$(date +"%d-%m-%Y-%H-%M-%S")
+editor="hx"
 
 menu() {
-		
-    while true; do
-        action=$(printf "%s\n" "${actions[@]}" | tac | fzf --height=10% --border --prompt="Choose an action: ")
+	while true; do
+		action=$(printf "%s\n" "${actions[@]}" | fzf --height=20% --border --layout=reverse --prompt="Choose an action: ")	
+		case $action in
+			"New note")
+				new_note
+				;;
+			"Open note")
+				open_note
+				;;
+			"Search")
+				search
+				;;
+			"Delete note")
+				delete_note
+				;;
+			"Quit")
+				break
+				;;
+			*)
+				echo "Invalid action. Please choose new, edit, delete, or quit."
+				;;
+		esac
+	done
+}
 
-        case $action in
-            New)
-                new_note
-                ;;
-            Edit)
-                edit_note
-                ;;
-            Delete)
-                delete_note
-                ;;
-            Quit)
-                break
-                ;;
-            *)
-                echo "Invalid action. Please choose new, edit, delete, or quit."
-                ;;
-        esac
-    done
+new_note(){
+	${editor} "$SCAN_DIR/$current_date_time.txt"
+}
+
+open_note(){
+	note=$(find "$SCAN_DIR" -type f -name "*.txt" | fzf --border --layout=reverse --preview="fold -s -w \$COLUMNS {} | cat" --preview-window=down:90% --prompt="Edit a Note: ")
+	if [[ -n "$note" ]]; then
+		${editor} "$note"
+	fi
 }
 
 menu
