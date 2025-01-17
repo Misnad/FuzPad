@@ -37,7 +37,7 @@ new_note(){
 }
 
 open_note(){
-	note=$(find "$SCAN_DIR" -type f -name "*.txt" | fzf --border --layout=reverse --preview="fold -s -w \$COLUMNS {} | cat" --preview-window=down:90% --prompt="Edit a Note: ")
+	note=$(find "$SCAN_DIR" -type f -name "*.txt" | fzf --border --layout=reverse --preview="fold -s -w \$COLUMNS {} | cat" --preview-window=down:80%:noinfo --prompt="Edit a Note: ")
 	if [[ -n "$note" ]]; then
 		${editor} "$note"
 	fi
