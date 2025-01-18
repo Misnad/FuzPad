@@ -1,0 +1,49 @@
+# Notes Bash Script Powered by FZF
+
+This repository contains a Bash script that helps manage notes with options to create, open, search, and delete notes.
+
+## Features
+
+- **New Note**: Create a new note with the current date and time as the filename.
+- **Open Note**: Open an existing note using fuzzy finder (fzf).
+- **Search**: Search within notes for specific content.
+- **Delete Note**: Delete selected notes.
+- **Quit**: Exit the script.
+
+## Requirements
+
+- Bash
+- [fzf](https://github.com/junegunn/fzf) (fuzzy finder)
+- [bat](https://github.com/sharkdp/bat) (for enhanced preview in search)
+- Your preferred text editor (default is `hx`)
+
+## Usage
+
+1. Clone the repository:
+
+```sh
+git clone https://github.com/JianZcar/notes-bash.git
+cd notes-bash
+```
+
+2. Make the script executable:
+
+```sh
+chmod +x notes
+```
+
+3. Run the script:
+
+```sh
+./notes
+```
+
+## Configuration
+
+- **Default Directory**: Change the default directory for notes by modifying the `dir` variable in the script.
+- **Text Editor**: Change the text editor by modifying the `editor` variable in the script.
+- **Text Format**: Change the text format by modifying the `text_format` variable in the script.
+
+## Contributing
+
+Feel free to fork the repository and submit pull requests. Contributions are welcome!
