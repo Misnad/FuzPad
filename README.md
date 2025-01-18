@@ -56,3 +56,7 @@ chmod +x notes
 ## Contributing
 
 Feel free to fork the repository and submit pull requests. Contributions are welcome!
+
+## License
+
+This project is licensed under the terms of the GNU General Public License v3.0. For more details, see the [LICENSE](LICENSE) file in the repository.
