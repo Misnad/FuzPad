@@ -6,6 +6,7 @@ actions=("New" "Open" "Search" "Delete" "Quit")
 current_date_time=$(date +"%d-%m-%Y-%H-%M-%S")
 text_format="txt"
 editor="hx"
+bat_theme="OneHalfLight"
 
 trap "exit" SIGINT SIGTERM
 
@@ -43,14 +44,18 @@ new(){
 }
 
 open(){
-	note=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --prompt="Edit: " --preview-window=down:80%:noinfo --preview="fold -s -w \$COLUMNS $dir/{} | cat")
+	note=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --ignore-case --prompt="Edit: " \
+	--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$bat_theme --style=plain $dir/{}")
+	
 	if [[ -n "$note" ]]; then
 		${editor} "$dir/$note"
 	fi
 }
 
 delete(){
-	notes=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --multi --prompt="Delete: " --preview-window=down:80%:noinfo --preview="fold -s -w \$COLUMNS $dir/{} | cat")
+	notes=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --multi --ignore-case --prompt="Delete: " \
+	--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$bat_theme --style=plain $dir/{}")
+	
 	if [[ -n "$notes" ]]; then
 		for note in $notes; do
 			rm "$dir/$note"
@@ -62,19 +67,21 @@ search(){
 	selected=$(fzf --bind "change:reload(
 		max_count=2
 		if ! [[ -z {q} ]]; then
-		  grep -rni {q} \"$dir\" 2> /dev/null |
+		  grep -rni --include='*.$text_format' {q} \"$dir\" 2> /dev/null |
 		  while IFS=: read -r file line content; do
 		    cleaned_content=\$(echo \"\$content\" | sed 's/://g')
 		    echo \" \$cleaned_content:\$line:\$(basename \"\$file\")\"
 		  done
 		fi
-	)" --border --layout=reverse --preview-window=down:80%:noinfo --prompt="Search: " --preview 'IFS=":" read -r content line filename <<< {}
- 	maxlines=$(wc -l < '$dir'/$filename)
- 	start_line=$(($line > 5 ? $line - 5 : 1))
- 	end_line=$(($line + 5 < maxlines ? $line + 5 : maxlines));
-	echo -e "\e[1m$filename\e[0m"
-	echo
-	bat --color=always --theme=OneHalfLight --style=plain --style=plain --highlight-line=$line --line-range $start_line:$end_line '$dir'/$filename | fold -s -w $COLUMNS' < /dev/null)
+	)" --border --layout=reverse --no-info --preview-window=down:80%:noinfo:wrap --ignore-case --prompt="Search: " \
+	--preview 'IFS=":" read -r content line filename <<< {}
+	 	maxlines=$(wc -l < '$dir'/$filename)
+	 	start_line=$(($line > 5 ? $line - 5 : 1))
+	 	end_line=$(($line + 5 < maxlines ? $line + 5 : maxlines));
+		echo -e "\e[1m$filename\e[0m"
+		echo
+		bat --color=always --theme='$bat_theme' --style=plain --paging=always --highlight-line=$line --line-range $start_line:$end_line '$dir'/$filename' < /dev/null)
+		
 	if [[ -n "$selected" ]]; then
 		IFS=":" read -r content line filename <<< $selected
 		${editor} +$line "$dir/$filename"
