@@ -43,14 +43,14 @@ new(){
 }
 
 open(){
-	note=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --prompt="Edit a Note: " --preview-window=down:80%:noinfo --preview="fold -s -w \$COLUMNS $dir/{} | cat")
+	note=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --prompt="Edit: " --preview-window=down:80%:noinfo --preview="fold -s -w \$COLUMNS $dir/{} | cat")
 	if [[ -n "$note" ]]; then
 		${editor} "$dir/$note"
 	fi
 }
 
 delete(){
-	notes=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --multi --prompt="Delete Note: " --preview-window=down:80%:noinfo --preview="fold -s -w \$COLUMNS $dir/{} | cat")
+	notes=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --multi --prompt="Delete: " --preview-window=down:80%:noinfo --preview="fold -s -w \$COLUMNS $dir/{} | cat")
 	if [[ -n "$notes" ]]; then
 		for note in $notes; do
 			rm "$dir/$note"
@@ -68,7 +68,7 @@ search(){
 		    echo \" \$cleaned_content:\$line:\$(basename \"\$file\")\"
 		  done
 		fi
-	)" --height=70% --border --layout=reverse --preview-window=down:80%:noinfo --prompt="Search: " --preview 'IFS=":" read -r content line filename <<< {}
+	)" --border --layout=reverse --preview-window=down:80%:noinfo --prompt="Search: " --preview 'IFS=":" read -r content line filename <<< {}
  	maxlines=$(wc -l < '$dir'/$filename)
  	start_line=$(($line > 5 ? $line - 5 : 1))
  	end_line=$(($line + 5 < maxlines ? $line + 5 : maxlines));
