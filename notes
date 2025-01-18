@@ -64,23 +64,29 @@ delete(){
 }
 
 search(){
-	selected=$(fzf --bind "change:reload(
+	selected=$(echo "Enter your query to begin searching"| fzf --bind 'change:reload(
 		max_count=2
-		if ! [[ -z {q} ]]; then
-		  grep -rni --include='*.$text_format' {q} \"$dir\" 2> /dev/null |
-		  while IFS=: read -r file line content; do
-		    cleaned_content=\$(echo \"\$content\" | sed 's/://g')
-		    echo \" \$cleaned_content:\$line:\$(basename \"\$file\")\"
-		  done
+		if [[ -z {q} ]]; then
+        echo "Enter your query to begin searching"
+    else
+			echo Found $(grep -rni --include="*."'$text_format' {q} '$dir' 2> /dev/null | wc -l) results
+			grep -rni --include="*."'$text_format' {q} '$dir' 2> /dev/null |
+			while IFS=: read -r file line content; do
+			  cleaned_content=$(echo "$content" | sed "s/://g")
+			  echo "$cleaned_content:$line:$(basename "$file")"
+			done
 		fi
-	)" --border --layout=reverse --no-info --preview-window=down:80%:noinfo:wrap --ignore-case --prompt="Search: " \
+	)' --border --layout=reverse --no-info --preview-window=down:80%:noinfo:wrap --ignore-case --header-lines=1 --prompt="Search: " \
 	--preview 'IFS=":" read -r content line filename <<< {}
-	 	maxlines=$(wc -l < '$dir'/$filename)
-	 	start_line=$(($line > 5 ? $line - 5 : 1))
-	 	end_line=$(($line + 5 < maxlines ? $line + 5 : maxlines));
-		echo -e "\e[1m$filename\e[0m"
-		echo
-		bat --color=always --theme='$bat_theme' --style=plain --paging=always --highlight-line=$line --line-range $start_line:$end_line '$dir'/$filename' < /dev/null)
+		[[ -z {q} ]] && exit
+		if ! [[ -z {} ]]; then
+		 	maxlines=$(wc -l < '$dir'/$filename)
+		 	start_line=$(($line > 5 ? $line - 5 : 1))
+		 	end_line=$(($line + 5 < maxlines ? $line + 5 : maxlines));
+			echo -e "\e[1m$filename\e[0m"
+			echo
+			bat --color=always --theme='$bat_theme' --style=plain --paging=always --highlight-line=$line --line-range $start_line:$end_line '$dir'/$filename
+		fi')
 		
 	if [[ -n "$selected" ]]; then
 		IFS=":" read -r content line filename <<< $selected
