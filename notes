@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Default directory to scan (change to your default directory if needed)
-SCAN_DIR="$HOME/.notes"
+dir="$HOME/.notes"
 actions=("New note" "Open note" "Search" "Delete note" "Quit")
 current_date_time=$(date +"%d-%m-%Y-%H-%M-%S")
+text_format="txt"
 editor="hx"
 
 menu() {
@@ -26,20 +27,52 @@ menu() {
 				break
 				;;
 			*)
-				echo "Invalid action. Please choose new, edit, delete, or quit."
+				echo "Invalid action"
 				;;
 		esac
 	done
 }
 
 new_note(){
-	${editor} "$SCAN_DIR/$current_date_time.txt"
+	${editor} "$dir/$current_date_time.$text_format"
 }
 
 open_note(){
-	note=$(find "$SCAN_DIR" -type f -name "*.txt" | fzf --border --layout=reverse --preview="fold -s -w \$COLUMNS {} | cat" --preview-window=down:80%:noinfo --prompt="Edit a Note: ")
+	note=$(find "$dir" -type f -name "*.$text_format" | fzf --border --layout=reverse --prompt="Edit a Note: " --preview-window=down:80%:noinfo --preview="fold -s -w \$COLUMNS {} | cat")
 	if [[ -n "$note" ]]; then
 		${editor} "$note"
+	fi
+}
+
+delete_note(){
+	notes=$(find "$dir" -type f -name "*.$text_format" | fzf --border --layout=reverse --multi --prompt="Delete Note: " --preview-window=down:80%:noinfo --preview="fold -s -w \$COLUMNS {} | cat")
+	if [[ -n "$notes" ]]; then
+		for note in $notes; do
+			rm "$note"
+		done
+	fi
+}
+
+search(){
+	selected=$(fzf --bind "change:reload(
+		max_count=2
+		if ! [[ -z {q} ]]; then
+		  grep -rni {q} \"$dir\" 2> /dev/null |
+		  while IFS=: read -r file line content; do
+		    cleaned_content=\$(echo \"\$content\" | sed 's/://g')
+		    echo \" \$cleaned_content:\$line:\$(basename \"\$file\")\"
+		  done
+		fi
+	)" --height=70% --border --layout=reverse --preview-window=down:80%:noinfo --prompt="Search: " --preview 'IFS=":" read -r content line filename <<< {}
+ 	maxlines=$(wc -l < '$dir'/$filename)
+ 	start_line=$(($line > 5 ? $line - 5 : 1))
+ 	end_line=$(($line + 5 < maxlines ? $line + 5 : maxlines));
+	echo $filename
+	echo
+	bat --color=always --theme=OneHalfLight --style=plain --highlight-line=$line --line-range $start_line:$end_line '$dir'/$filename | fold -s -w $COLUMNS' < /dev/null)
+	if [[ -n "$selected" ]]; then
+		IFS=":" read -r content line filename <<< $selected
+		${editor} +$line $dir/$filename
 	fi
 }
 
