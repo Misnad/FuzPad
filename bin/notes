@@ -85,8 +85,9 @@ search_notes(){
 		if [[ -z {q} ]]; then
 			echo "Enter your query to begin searching"
 		else
-			echo Found $(grep -rni --include="*."'$TEXT_FORMAT' {q} '$NOTES_DIR' 2> /dev/null | wc -l) results
-			grep -rni --include="*."'$TEXT_FORMAT' {q} '$NOTES_DIR' 2> /dev/null |
+			RESULTS=$(grep -rni --include="*."'$TEXT_FORMAT' {q} '$NOTES_DIR' 2> /dev/null)
+			[ -n "$RESULTS" ] && echo "Found $(echo "$RESULTS" | wc -l) results" || { echo "Found 0 results"; exit; }
+			echo "$RESULTS" |
 			while IFS=: read -r FILE_NAME LINE CONTENT; do
 				CLEANED_CONTENT=$(echo "$CONTENT" | sed "s/://g")
 				echo "$CLEANED_CONTENT:$LINE:$(basename "$FILE_NAME")"
