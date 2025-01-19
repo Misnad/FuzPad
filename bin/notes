@@ -6,8 +6,8 @@ TEXT_FORMAT="txt"
 EDITOR="${EDITOR:-nano}"
 BAT_THEME="OneHalfLight"
 
-# Only applies to open and delete 
-REVERSE=true
+# Only applies to open and delete (default is true)
+REVERSE_LIST=true
 # 'W' for creation date, 'Y' for modified date (default is W)
 SORT_FORMAT=W
 
@@ -56,7 +56,7 @@ show_menu() {
 }
 
 list_order() {
-  if [ ! "$REVERSE" = true ]; then
+  if [ ! "$REVERSE_LIST" = true ]; then
     echo "--tac"
   else
     echo ""
