@@ -13,7 +13,6 @@ This repository contains a Bash script that helps manage notes with options to c
 - **Open**: Open an existing note.
 - **Search**: Search within notes for specific content.
 - **Delete**: Delete selected notes.
-- **Quit**: Exit the script.
 
 ## Planned Features
 - **Tags**: tagging system
