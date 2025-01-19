@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Default directory to scan (change to your default directory if needed)
+# Default directory to scan (change to your default directory if needed).
 NOTES_DIR="$HOME/Documents/.notes"
 TEXT_FORMAT="txt"
 EDITOR="${EDITOR:-nano}"
@@ -13,6 +13,9 @@ END_LINE_SEARCH_PREVIEW=9999
 get_current_date_time() {
 	echo $(date +"%d-%m-%Y-%H-%M-%S")
 }
+
+# Creates NOTES_DIR if it does not exist.
+[ ! -d "$NOTES_DIR" ] && mkdir -p "$NOTES_DIR"
 
 trap "exit" SIGINT SIGTERM
 
