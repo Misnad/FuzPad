@@ -19,11 +19,11 @@ trap "exit" SIGINT SIGTERM
 show_menu() {
 	ACTIONS=("New" "Open" "Search" "Delete" "Quit")
 	while true; do
-		selected_action=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --layout=reverse --prompt="Choose an action: ")
+		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --layout=reverse --prompt="Choose an action: ")
 		if [[ $? != 0 ]]; then
 			break
 		fi
-		case $selected_action in
+		case $SELECTED_ACTION in
 			"New")
 				create_new_note
 				;;
@@ -59,11 +59,11 @@ create_new_note(){
 }
 
 open_note(){
-	note=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse $(list_order) --ignore-case --prompt="Open: " \
+	NOTE=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse $(list_order) --ignore-case --prompt="Open: " \
 	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
 
-	if [[ -n "$note" ]]; then
-		${EDITOR} "$NOTES_DIR/$note"
+	if [[ -n "$NOTE" ]]; then
+		${EDITOR} "$NOTES_DIR/$NOTE"
 	fi
 }
 
@@ -84,7 +84,7 @@ delete_notes(){
 }
 
 search_notes(){
-	selected=$(echo "Enter your query to begin searching" | fzf --bind 'change:reload(
+	SELECTED=$(echo "Enter your query to begin searching" | fzf --bind 'change:reload(
 		if [[ -z {q} ]]; then
 			echo "Enter your query to begin searching"
 		else
@@ -108,8 +108,8 @@ search_notes(){
 			bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE --line-range $START_LINE:$END_LINE '$NOTES_DIR'/$FILE_NAME
 		fi')
         
-	if [[ -n "$selected" ]]; then
-		IFS=":" read -r CONTENT LINE FILE_NAME <<< $selected
+	if [[ -n "$SELECTED" ]]; then
+		IFS=":" read -r CONTENT LINE FILE_NAME <<< $SELECTED
 		${EDITOR} +$LINE "$NOTES_DIR/$FILE_NAME"
 	fi
 }
