@@ -1,6 +1,6 @@
-# Notes Bash Script Powered by FZF
+# Notes
 
-This repository contains a Bash script that helps manage notes with options to create, open, search, and delete notes.
+ _A note management bash script. Powered by [junegunn/fzf](https://github.com/junegunn/fzf)_
 
 <img src="https://i.imgur.com/5WXsOH1.png" alt="Sample Image" width="500"/>
 <img src="https://i.imgur.com/lkyY8Fe.png" alt="Sample Image" width="500"/>
@@ -29,7 +29,7 @@ This repository contains a Bash script that helps manage notes with options to c
 
 - Bash
 - [fzf](https://github.com/junegunn/fzf) (fuzzy finder)
-- [bat](https://github.com/sharkdp/bat) (for enhanced preview in search)
+- [bat](https://github.com/sharkdp/bat) (for enhanced preview)
 - Your preferred text editor (default is `nano`)
 
 ## Usage
