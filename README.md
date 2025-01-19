@@ -38,7 +38,7 @@ cd notes-bash
 2. Make the script executable:
 
 ```sh
-chmod +x notes
+chmod +x bin/notes
 ```
 
 3. Run the script:
