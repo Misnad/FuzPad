@@ -2,11 +2,13 @@
 
 # Default directory to scan (change to your default directory if needed)
 NOTES_DIR="$HOME/.notes"
-ACTIONS=("New" "Open" "Search" "Delete" "Quit")
 TEXT_FORMAT="txt"
 EDITOR="${EDITOR:-nano}"
 BAT_THEME="OneHalfLight"
 DESCENDING=true
+PREVIEW_SIZE=70%
+START_LINE_SEARCH_PREVIEW=5
+END_LINE_SEARCH_PREVIEW=9999
 
 get_current_date_time() {
 	echo $(date +"%d-%m-%Y-%H-%M-%S")
@@ -15,8 +17,9 @@ get_current_date_time() {
 trap "exit" SIGINT SIGTERM
 
 show_menu() {
+	ACTIONS=("New" "Open" "Search" "Delete" "Quit")
 	while true; do
-		selected_action=$(printf "%s\n" "${ACTIONS[@]}" | fzf --height=20% --border --layout=reverse --prompt="Choose an action: ")
+		selected_action=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --layout=reverse --prompt="Choose an action: ")
 		if [[ $? != 0 ]]; then
 			break
 		fi
@@ -57,7 +60,7 @@ create_new_note(){
 
 open_note(){
 	note=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse $(list_order) --ignore-case --prompt="Open: " \
-	--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
+	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
 
 	if [[ -n "$note" ]]; then
 		${EDITOR} "$NOTES_DIR/$note"
@@ -66,11 +69,11 @@ open_note(){
 
 delete_notes(){
 	NOTES=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse $(list_order) --multi --ignore-case --prompt="Delete: " \
-	--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
+	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
 
 	if [[ -n "$NOTES" ]]; then
 		CONFIRMATION=$(printf "%s\n" "$NOTES" | fzf --print-query --border --layout=reverse $(list_order) --disabled --prompt="Type 'yes' to confirm: " \
-		--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}" | head -n 1)
+		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}" | head -n 1)
 
 		if [[ "$CONFIRMATION" =~ ^[Yy][Ee][Ss]$ ]]; then
 			for NOTE in $NOTES; do
@@ -93,13 +96,13 @@ search_notes(){
 				echo "$CLEANED_CONTENT:$LINE:$(basename "$FILE_NAME")"
 			done
 		fi)' \
-	--border --layout=reverse --no-info --preview-window=down:80%:noinfo:wrap --ignore-case --header-lines=1 --prompt="Search: " \
+	--border --layout=reverse --no-info --preview-window=down:$PREVIEW_SIZE:noinfo:wrap --ignore-case --header-lines=1 --prompt="Search: " \
 	--preview 'IFS=":" read -r CONTENT LINE FILE_NAME <<< {}
 		[[ -z {q} ]] && exit
 		if ! [[ -z {} ]]; then
 			MAX_LINES=$(wc -l < '$NOTES_DIR'/$FILE_NAME)
-			START_LINE=$(($LINE > 5 ? $LINE - 5 : 1))
-			END_LINE=$(($LINE + 5 < MAX_LINES ? $LINE + 5 : MAX_LINES));
+			START_LINE=$(($LINE > '$START_LINE_SEARCH_PREVIEW' ? $LINE - '$START_LINE_SEARCH_PREVIEW' : 1))
+			END_LINE=$(($LINE + 5 < '$END_LINE_SEARCH_PREVIEW' ? $LINE + '$END_LINE_SEARCH_PREVIEW' : MAX_LINES));
 			echo -e "\e[1m$FILE_NAME\e[0m"
 			echo
 			bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE --line-range $START_LINE:$END_LINE '$NOTES_DIR'/$FILE_NAME
