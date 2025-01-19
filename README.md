@@ -3,11 +3,8 @@
 This repository contains a Bash script that helps manage notes with options to create, open, search, and delete notes.
 
 ![main_menu](https://i.imgur.com/5WXsOH1.png)
-
 ![open_note](https://i.imgur.com/lkyY8Fe.png)
-
 ![search_notes](https://i.imgur.com/NMbPXN7.png)
-
 ![delete_notes](https://i.imgur.com/5IljHKS.png)
 
 ## Features
