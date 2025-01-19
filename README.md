@@ -4,11 +4,11 @@ This repository contains a Bash script that helps manage notes with options to c
 
 ![main_menu](https://i.imgur.com/5WXsOH1.png)
 
-![open_note](https://i.imgur.com/lkyY8Fe)
+![open_note](https://i.imgur.com/lkyY8Fe.png)
 
-![search_notes](https://i.imgur.com/NMbPXN7)
+![search_notes](https://i.imgur.com/NMbPXN7.png)
 
-![delete_notes](https://i.imgur.com/5IljHKS)
+![delete_notes](https://i.imgur.com/5IljHKS.png)
 
 ## Features
 
