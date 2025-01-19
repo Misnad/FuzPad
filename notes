@@ -7,6 +7,7 @@ CURRENT_DATE_TIME=$(date +"%d-%m-%Y-%H-%M-%S")
 TEXT_FORMAT="txt"
 EDITOR="${EDITOR:-nano}"
 BAT_THEME="OneHalfLight"
+DESCENDING=true
 
 trap "exit" SIGINT SIGTERM
 
@@ -39,12 +40,20 @@ show_menu() {
 	done
 }
 
+list_order() {
+  if [ "$DESCENDING" = true ]; then
+    tac
+  else
+    cat
+  fi
+}
+
 create_new_note(){
 	${EDITOR} "$NOTES_DIR/$CURRENT_DATE_TIME.$TEXT_FORMAT"
 }
 
 open_note(){
-	note=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse --ignore-case --prompt="Open: " \
+	note=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | list_order | fzf --border --layout=reverse --ignore-case --prompt="Open: " \
 	--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
 
 	if [[ -n "$note" ]]; then
@@ -53,7 +62,7 @@ open_note(){
 }
 
 delete_notes(){
-	notes=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse --multi --ignore-case --prompt="Delete: " \
+	notes=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | list_order | fzf --border --layout=reverse --multi --ignore-case --prompt="Delete: " \
 	--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
 
 	if [[ -n "$notes" ]]; then
