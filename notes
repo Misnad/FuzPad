@@ -5,7 +5,7 @@ dir="$HOME/.notes"
 actions=("New" "Open" "Search" "Delete" "Quit")
 current_date_time=$(date +"%d-%m-%Y-%H-%M-%S")
 text_format="txt"
-editor="hx"
+editor="${EDITOR:-nano}"
 bat_theme="OneHalfLight"
 
 trap "exit" SIGINT SIGTERM
