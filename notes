@@ -44,7 +44,7 @@ new(){
 }
 
 open(){
-	note=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --ignore-case --prompt="Edit: " \
+	note=$(find "$dir" -type f -name "*.$text_format" | xargs -I {} basename {} | fzf --border --layout=reverse --ignore-case --prompt="Open: " \
 	--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$bat_theme --style=plain $dir/{}")
 	
 	if [[ -n "$note" ]]; then
