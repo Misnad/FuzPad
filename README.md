@@ -1,12 +1,17 @@
-# Notes
+<p align="center">
+    <h1>Notes</h1>
+</p>
 
- _A note management bash script. Powered by [junegunn/fzf](https://github.com/junegunn/fzf)_
+<p align="center">
+    <em>A note management bash script. Powered by <a href="https://github.com/junegunn/fzf">junegunn/fzf</a></em>
+</p>
 
-<img src="https://i.imgur.com/5WXsOH1.png" alt="Sample Image" width="500"/>
-<img src="https://i.imgur.com/lkyY8Fe.png" alt="Sample Image" width="500"/>
-<img src="https://i.imgur.com/NMbPXN7.png" alt="Sample Image" width="500"/>
-<img src="https://i.imgur.com/5IljHKS.png" alt="Sample Image" width="500"/>
-
+<p align="center">
+ <img src="https://i.imgur.com/5WXsOH1.png" alt="Sample Image" width="500"/>
+ <img src="https://i.imgur.com/lkyY8Fe.png" alt="Sample Image" width="500"/>
+ <img src="https://i.imgur.com/NMbPXN7.png" alt="Sample Image" width="500"/>
+ <img src="https://i.imgur.com/5IljHKS.png" alt="Sample Image" width="500"/>
+</p>
 ## Features
 
 - **New**: Create a new note with the current date and time as the filename.
