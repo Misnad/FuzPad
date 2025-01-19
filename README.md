@@ -10,7 +10,7 @@ This repository contains a Bash script that helps manage notes with options to c
 ## Features
 
 - **New**: Create a new note with the current date and time as the filename.
-- **Open**: Open an existing note using fuzzy finder (fzf).
+- **Open**: Open an existing note.
 - **Search**: Search within notes for specific content.
 - **Delete**: Delete selected notes.
 - **Quit**: Exit the script.
