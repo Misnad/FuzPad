@@ -22,7 +22,7 @@ This repository contains a Bash script that helps manage notes with options to c
 
 ## Goals
 
-- Provide a straightforward note management solution using a Bash script.
+- Provide a straightforward and minimalistic note management solution using a Bash script.
 - Ensure ease of use with intuitive commands and interface.
 
 ## Requirements
