@@ -64,33 +64,32 @@ delete_notes(){
 }
 
 search_notes(){
-	selected=$(echo "Enter your query to begin searching"| fzf --bind 'change:reload(
-		max_count=2
+	selected=$(echo "Enter your query to begin searching" | fzf --bind 'change:reload(
 		if [[ -z {q} ]]; then
 			echo "Enter your query to begin searching"
 		else
 			echo Found $(grep -rni --include="*."'$TEXT_FORMAT' {q} '$NOTES_DIR' 2> /dev/null | wc -l) results
 			grep -rni --include="*."'$TEXT_FORMAT' {q} '$NOTES_DIR' 2> /dev/null |
-			while IFS=: read -r file line content; do
-				cleaned_content=$(echo "$content" | sed "s/://g")
-				echo "$cleaned_content:$line:$(basename "$file")"
+			while IFS=: read -r FILE_NAME LINE CONTENT; do
+				CLEANED_CONTENT=$(echo "$CONTENT" | sed "s/://g")
+				echo "$CLEANED_CONTENT:$LINE:$(basename "$FILE_NAME")"
 			done
 		fi)' \
 	--border --layout=reverse --no-info --preview-window=down:80%:noinfo:wrap --ignore-case --header-lines=1 --prompt="Search: " \
-	--preview 'IFS=":" read -r content line filename <<< {}
+	--preview 'IFS=":" read -r CONTENT LINE FILE_NAME <<< {}
 		[[ -z {q} ]] && exit
 		if ! [[ -z {} ]]; then
-			maxlines=$(wc -l < '$NOTES_DIR'/$filename)
-			start_line=$(($line > 5 ? $line - 5 : 1))
-			end_line=$(($line + 5 < maxlines ? $line + 5 : maxlines));
-			echo -e "\e[1m$filename\e[0m"
+			MAX_LINES=$(wc -l < '$NOTES_DIR'/$FILE_NAME)
+			START_LINE=$(($LINE > 5 ? $LINE - 5 : 1))
+			END_LINE=$(($LINE + 5 < MAX_LINES ? $LINE + 5 : MAX_LINES));
+			echo -e "\e[1m$FILE_NAME\e[0m"
 			echo
-			bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$line --line-range $start_line:$end_line '$NOTES_DIR'/$filename
+			bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE --line-range $START_LINE:$END_LINE '$NOTES_DIR'/$FILE_NAME
 		fi')
         
 	if [[ -n "$selected" ]]; then
-		IFS=":" read -r content line filename <<< $selected
-		${EDITOR} +$line "$NOTES_DIR/$filename"
+		IFS=":" read -r CONTENT LINE FILE_NAME <<< $selected
+		${EDITOR} +$LINE "$NOTES_DIR/$FILE_NAME"
 	fi
 }
 
