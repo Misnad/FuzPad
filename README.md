@@ -2,13 +2,17 @@
 
 This repository contains a Bash script that helps manage notes with options to create, open, search, and delete notes.
 
+<img src="https://i.imgur.com/5WXsOH1.png" alt="Sample Image" width="500"/>
+<img src="https://i.imgur.com/lkyY8Fe.png" alt="Sample Image" width="500"/>
+<img src="https://i.imgur.com/NMbPXN7.png" alt="Sample Image" width="500"/>
+<img src="https://i.imgur.com/5IljHKS.png" alt="Sample Image" width="500"/>
+
 ## Features
 
 - **New**: Create a new note with the current date and time as the filename.
-- **Open**: Open an existing note using fuzzy finder (fzf).
+- **Open**: Open an existing note.
 - **Search**: Search within notes for specific content.
 - **Delete**: Delete selected notes.
-- **Quit**: Exit the script.
 
 ## Planned Features
 - **Tags**: tagging system
