@@ -44,7 +44,7 @@ chmod +x notes
 3. Run the script:
 
 ```sh
-./notes
+./bin/notes
 ```
 
 ## Configuration
