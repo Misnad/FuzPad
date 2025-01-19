@@ -1,4 +1,5 @@
 #!/bin/bash
+SHELL=/bin/bash
 
 # Default directory to scan (change to your default directory if needed).
 NOTES_DIR="$HOME/Documents/.notes"
