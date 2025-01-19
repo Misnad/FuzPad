@@ -17,7 +17,8 @@ This repository contains a Bash script that helps manage notes with options to c
 ## Planned Features
 - **Tags**: tagging system
 - **Version control**: utilize git for syncing notes
-- **Make an installer**: use brew for packaging 
+- **Make an installer**: use brew for packaging
+- **CLI**: create a cli that allows piping, etc.
 
 ## Goals
 
