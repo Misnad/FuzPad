@@ -1,6 +1,4 @@
-<p align="center">
-    <h1>Notes</h1>
-</p>
+<h1 align="center">Notes</h1>
 
 <p align="center">
     <em>A note management bash script. Powered by <a href="https://github.com/junegunn/fzf">junegunn/fzf</a></em>
@@ -12,8 +10,8 @@
  <img src="https://i.imgur.com/NMbPXN7.png" alt="Sample Image" width="500"/>
  <img src="https://i.imgur.com/5IljHKS.png" alt="Sample Image" width="500"/>
 </p>
-## Features
 
+## Features
 - **New**: Create a new note with the current date and time as the filename.
 - **Open**: Open an existing note.
 - **Search**: Search within notes for specific content.
