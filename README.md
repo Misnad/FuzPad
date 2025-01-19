@@ -24,7 +24,7 @@ This repository contains a Bash script that helps manage notes with options to c
 - Bash
 - [fzf](https://github.com/junegunn/fzf) (fuzzy finder)
 - [bat](https://github.com/sharkdp/bat) (for enhanced preview in search)
-- Your preferred text editor (default is `hx`)
+- Your preferred text editor (default is `nano`)
 
 ## Usage
 
