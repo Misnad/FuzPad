@@ -3,11 +3,14 @@
 # Default directory to scan (change to your default directory if needed)
 NOTES_DIR="$HOME/.notes"
 ACTIONS=("New" "Open" "Search" "Delete" "Quit")
-CURRENT_DATE_TIME=$(date +"%d-%m-%Y-%H-%M-%S")
 TEXT_FORMAT="txt"
 EDITOR="${EDITOR:-nano}"
 BAT_THEME="OneHalfLight"
 DESCENDING=true
+
+get_current_date_time() {
+	echo $(date +"%d-%m-%Y-%H-%M-%S")
+}
 
 trap "exit" SIGINT SIGTERM
 
@@ -42,18 +45,18 @@ show_menu() {
 
 list_order() {
   if [ "$DESCENDING" = true ]; then
-    tac
+    echo "--tac"
   else
-    cat
+    echo ""
   fi
 }
 
 create_new_note(){
-	${EDITOR} "$NOTES_DIR/$CURRENT_DATE_TIME.$TEXT_FORMAT"
+	${EDITOR} "$NOTES_DIR/$(get_current_date_time).$TEXT_FORMAT"
 }
 
 open_note(){
-	note=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | list_order | fzf --border --layout=reverse --ignore-case --prompt="Open: " \
+	note=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse $(list_order) --ignore-case --prompt="Open: " \
 	--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
 
 	if [[ -n "$note" ]]; then
@@ -62,13 +65,18 @@ open_note(){
 }
 
 delete_notes(){
-	notes=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | list_order | fzf --border --layout=reverse --multi --ignore-case --prompt="Delete: " \
+	NOTES=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse $(list_order) --multi --ignore-case --prompt="Delete: " \
 	--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
 
-	if [[ -n "$notes" ]]; then
-		for note in $notes; do
-			rm "$NOTES_DIR/$note"
-		done
+	if [[ -n "$NOTES" ]]; then
+		CONFIRMATION=$(printf "%s\n" "$NOTES" | fzf --print-query --border --layout=reverse $(list_order) --disabled --prompt="Type 'yes' to confirm: " \
+		--preview-window=down:80%:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}" | head -n 1)
+
+		if [[ "$CONFIRMATION" =~ ^[Yy][Ee][Ss]$ ]]; then
+			for NOTE in $NOTES; do
+				rm "$NOTES_DIR/$NOTE"
+			done
+		fi
 	fi
 }
 
