@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default directory to scan (change to your default directory if needed)
-NOTES_DIR="$HOME/.notes"
+NOTES_DIR="$HOME/Documents/.notes"
 TEXT_FORMAT="txt"
 EDITOR="${EDITOR:-nano}"
 BAT_THEME="OneHalfLight"
