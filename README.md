@@ -49,9 +49,9 @@ chmod +x notes
 
 ## Configuration
 
-- **Default Directory**: Change the default directory for notes by modifying the `dir` variable in the script.
-- **Text Editor**: Change the text editor by modifying the `editor` variable in the script.
-- **Text Format**: Change the text format by modifying the `text_format` variable in the script.
+- **Default Directory**: Change the default directory for notes by modifying the `NOTES_DIR` variable in the script.
+- **Text Editor**: Change the text editor by modifying the `EDITOR` variable in the script.
+- **Text Format**: Change the text format by modifying the `TEXT_FORMAT` variable in the script.
 
 ## Contributing
 
