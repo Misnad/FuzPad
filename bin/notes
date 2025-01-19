@@ -5,8 +5,14 @@ NOTES_DIR="$HOME/Documents/.notes"
 TEXT_FORMAT="txt"
 EDITOR="${EDITOR:-nano}"
 BAT_THEME="OneHalfLight"
-DESCENDING=true
+
+# Only applies to open and delete 
+REVERSE=true
+# 'W' for creation date, 'Y' for modified date (default is W)
+SORT_FORMAT=W
+
 PREVIEW_SIZE=70%
+# Recommend 5 for start_line so user can see the highlighted line quickly in the search preview
 START_LINE_SEARCH_PREVIEW=5
 END_LINE_SEARCH_PREVIEW=9999
 
@@ -50,7 +56,7 @@ show_menu() {
 }
 
 list_order() {
-  if [ "$DESCENDING" = true ]; then
+  if [ ! "$REVERSE" = true ]; then
     echo "--tac"
   else
     echo ""
@@ -62,7 +68,9 @@ create_new_note(){
 }
 
 open_note(){
-	NOTE=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse $(list_order) --ignore-case --prompt="Open: " \
+	NOTE=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | sort -n | cut -d ' ' -f2- | xargs -I {} basename {} | fzf --border \
+	--layout=reverse $(list_order) \
+	--ignore-case --prompt="Open: " \
 	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
 
 	if [[ -n "$NOTE" ]]; then
@@ -71,11 +79,16 @@ open_note(){
 }
 
 delete_notes(){
-	NOTES=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" | xargs -I {} basename {} | fzf --border --layout=reverse $(list_order) --multi --ignore-case --prompt="Delete: " \
+	NOTES=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | sort -n | cut -d ' ' -f2- | xargs -I {} basename {} | fzf --border \
+	--layout=reverse $(list_order) \
+	--multi --ignore-case --prompt="Delete: " \
 	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
 
 	if [[ -n "$NOTES" ]]; then
-		CONFIRMATION=$(printf "%s\n" "$NOTES" | fzf --print-query --border --layout=reverse $(list_order) --disabled --prompt="Type 'yes' to confirm: " \
+		CONFIRMATION=$(printf "%s\n" "$NOTES" | while read -r file; do stat --format="%$SORT_FORMAT %n" "$NOTES_DIR/$file"; done | sort -n | cut -d ' ' -f2- | xargs -I {} basename {} | \
+		fzf --print-query --border \
+		--layout=reverse $(list_order) \
+		--disabled --prompt="Type 'yes' to confirm: " \
 		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}" | head -n 1)
 
 		if [[ "$CONFIRMATION" =~ ^[Yy][Ee][Ss]$ ]]; then
