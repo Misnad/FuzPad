@@ -4,23 +4,24 @@
 SHELL=/bin/bash
 
 # Default directory to scan (change to your default directory if needed).
-NOTES_DIR="$HOME/Documents/.notes"
-TEXT_FORMAT="txt"
-EDITOR="${EDITOR:-nano}"
-BAT_THEME="OneHalfLight"
+NOTES_DIR="${NOTES_DIR:-"$HOME/Documents/.notes"}"
+TEXT_FORMAT="${NOTES_TEXT_FORMAT:-"txt"}"
+EDITOR="${EDITOR:-"nano"}"
+DATE_TIME_FORMAT="${NOTES_DATE_TIME_FORMAT:-"%Y-%m-%d-%H-%M-%S"}"
+BAT_THEME="${NOTES_BAT_THEME:-"OneHalfLight"}"
 
-# Only applies to open and delete (default is true)
-REVERSE_LIST=false
+# Only applies to open and delete (default is false)
+REVERSE_LIST=${NOTES_REVERSE_LIST:-"false"}
 # 'T@' or 'W' for creation date, 'Y' for modified date (default is W)
-SORT_FORMAT=T@
+SORT_FORMAT=${NOTES_SORT_FORMAT:-"T@"}
 
-PREVIEW_SIZE=70%
+PREVIEW_SIZE=${NOTES_PREVIEW_SIZE:-"70%"}
 # Recommend 5 for start_line so user can see the highlighted line quickly in the search preview
-START_LINE_SEARCH_PREVIEW=5
-END_LINE_SEARCH_PREVIEW=9999
+START_LINE_SEARCH_PREVIEW=${NOTES_START_LINE_SEARCH_PREVIEW:-"5"}
+END_LINE_SEARCH_PREVIEW=${END_LINE_SEARCH_PREVIEW:-"9999"}
 
 get_current_date_time() {
-	echo $(date +"%d-%m-%Y-%H-%M-%S")
+	echo $(date +"$DATE_TIME_FORMAT")
 }
 
 # Creates NOTES_DIR if it does not exist.
