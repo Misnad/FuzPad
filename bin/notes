@@ -24,7 +24,10 @@ get_current_date_time() {
 }
 
 # Creates NOTES_DIR if it does not exist.
-[ ! -d "$NOTES_DIR" ] && mkdir -p "$NOTES_DIR"
+if [[ ! -d "$NOTES_DIR" ]]; then
+	mkdir -p "$NOTES_DIR"
+	cd "$NOTES_DIR" && git init
+fi
 
 trap "exit" SIGINT SIGTERM
 
