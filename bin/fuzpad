@@ -24,8 +24,11 @@ get_current_date_time() {
 	echo $(date +"$DATE_TIME_FORMAT")
 }
 
-# Creates FUZPAD_DIR if it does not exist.
-[ ! -d "$FUZPAD_DIR" ] && mkdir -p "$FUZPAD_DIR"
+# Creates FUZZPAD_DIR if it does not exist.
+if [[ ! -d "$FUZZPAD_DIR" ]]; then
+	mkdir -p "$FUZZPAD_DIR"
+	cd "$FUZZPAD_DIR" && git init
+fi
 
 trap "exit" SIGINT SIGTERM
 
