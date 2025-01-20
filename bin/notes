@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set the SHELL environment variable, fixes POSIX-incompatible shells
+SHELL=/bin/bash
+
 # Default directory to scan (change to your default directory if needed).
 NOTES_DIR="$HOME/Documents/.notes"
 TEXT_FORMAT="txt"
