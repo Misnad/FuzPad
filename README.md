@@ -1,4 +1,4 @@
-<h1 align="center">Notes</h1>
+<h1 align="center">FuzPad!</h1>
 
 <p align="center">
     <em>A note management bash script. Powered by <a href="https://github.com/junegunn/fzf">junegunn/fzf</a></em>
