@@ -10,9 +10,9 @@ EDITOR="${EDITOR:-nano}"
 BAT_THEME="OneHalfLight"
 
 # Only applies to open and delete (default is true)
-REVERSE_LIST=true
-# 'W' for creation date, 'Y' for modified date (default is W)
-SORT_FORMAT=W
+REVERSE_LIST=false
+# 'T@' or 'W' for creation date, 'Y' for modified date (default is W)
+SORT_FORMAT=T@
 
 PREVIEW_SIZE=70%
 # Recommend 5 for start_line so user can see the highlighted line quickly in the search preview
