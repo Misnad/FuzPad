@@ -70,42 +70,42 @@ chmod +x bin/notes
 
 - **Text Format**: Change the text format by modifying the `TEXT_FORMAT` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
-  export TEXT_FORMAT="txt"
+  export NOTES_TEXT_FORMAT="txt"
   ```
 
 - **Date Time Format**: Change the date and time format used for note filenames by modifying the `DATE_TIME_FORMAT` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
-  export DATE_TIME_FORMAT="%Y-%m-%d-%H-%M-%S"
+  export NOTES_DATE_TIME_FORMAT="%Y-%m-%d-%H-%M-%S"
   ```
 
 - **BAT Theme**: Change the theme used by `bat` for previewing notes by modifying the `BAT_THEME` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
-  export BAT_THEME="OneHalfLight"
+  export NOTES_BAT_THEME="OneHalfLight"
   ```
 
 - **Reverse List**: Set to `true` to reverse the order of the list when opening or deleting notes by modifying the `REVERSE_LIST` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
-  export REVERSE_LIST="false"
+  export NOTES_REVERSE_LIST="false"
   ```
 
 - **Sort Format**: Change the sorting format for listing notes (`T@` for creation date, `Y` for modified date) by modifying the `SORT_FORMAT` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
-  export SORT_FORMAT="T@"
+  export NOTES_SORT_FORMAT="T@"
   ```
 
 - **Preview Size**: Change the size of the preview window for `fzf` by modifying the `PREVIEW_SIZE` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
-  export PREVIEW_SIZE="70%"
+  export NOTES_PREVIEW_SIZE="70%"
   ```
 
 - **Start Line Search Preview**: Set the starting line number for the search preview by modifying the `START_LINE_SEARCH_PREVIEW` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
-  export START_LINE_SEARCH_PREVIEW="5"
+  export NOTES_START_LINE_SEARCH_PREVIEW="5"
   ```
 
 - **End Line Search Preview**: Set the ending line number for the search preview by modifying the `END_LINE_SEARCH_PREVIEW` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
-  export END_LINE_SEARCH_PREVIEW="9999"
+  export NOTES_END_LINE_SEARCH_PREVIEW="9999"
   ```
 
 After adding the necessary variables to your `~/.bashrc` file, remember to source it to apply the changes:
