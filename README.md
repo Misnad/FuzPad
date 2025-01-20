@@ -11,6 +11,10 @@
  <img src="https://i.imgur.com/5IljHKS.png" alt="Sample Image" width="350"/>
 </p>
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=JianZcar/FuzPad&type=Timeline)](https://star-history.com/#JianZcar/FuzPad&Timeline)
+
 ## Features
 - **New**: Create a new note with the current date and time as the filename.
 - **Open**: Open an existing note.
