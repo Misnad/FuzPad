@@ -1,7 +1,7 @@
 <h1 align="center">⚡FuzPad!⚡</h1>
 
 <p align="center">
-    <em>A note management bash script. Powered by <a href="https://github.com/junegunn/fzf">junegunn/fzf</a></em>
+    <em>FuzPad is a minimalistic note management solution. Powered by <a href="https://github.com/junegunn/fzf">junegunn/fzf</a></em>
 </p>
 
 <p align="center">
