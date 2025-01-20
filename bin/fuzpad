@@ -4,29 +4,30 @@
 SHELL=/bin/bash
 
 # Default directory to scan (change to your default directory if needed).
-NOTES_DIR="$HOME/Documents/.notes"
-TEXT_FORMAT="txt"
-EDITOR="${EDITOR:-nano}"
-BAT_THEME="OneHalfLight"
+FUZPAD_DIR="${FUZPAD_DIR:-"$HOME/Documents/.notes"}"
+TEXT_FORMAT="${FUZPAD_TEXT_FORMAT:-"txt"}"
+EDITOR="${EDITOR:-"nano"}"
+DATE_TIME_FORMAT="${FUZPAD_DATE_TIME_FORMAT:-"%Y-%m-%d-%H-%M-%S"}"
+BAT_THEME="${FUZPAD_BAT_THEME:-"OneHalfLight"}"
 
-# Only applies to open and delete (default is true)
-REVERSE_LIST=false
+# Only applies to open and delete (default is false)
+REVERSE_LIST=${FUZPAD_REVERSE_LIST:-"false"}
 # 'T@' or 'W' for creation date, 'Y' for modified date (default is W)
-SORT_FORMAT=T@
+SORT_FORMAT=${FUZPAD_SORT_FORMAT:-"T@"}
 
-PREVIEW_SIZE=70%
+PREVIEW_SIZE=${FUZPAD_PREVIEW_SIZE:-"70%"}
 # Recommend 5 for start_line so user can see the highlighted line quickly in the search preview
-START_LINE_SEARCH_PREVIEW=5
-END_LINE_SEARCH_PREVIEW=9999
+START_LINE_SEARCH_PREVIEW=${FUZPAD_START_LINE_SEARCH_PREVIEW:-"5"}
+END_LINE_SEARCH_PREVIEW=${FUZPAD_END_LINE_SEARCH_PREVIEW:-"9999"}
 
 get_current_date_time() {
-	echo $(date +"%d-%m-%Y-%H-%M-%S")
+	echo $(date +"$DATE_TIME_FORMAT")
 }
 
-# Creates NOTES_DIR if it does not exist.
-if [[ ! -d "$NOTES_DIR" ]]; then
-	mkdir -p "$NOTES_DIR"
-	cd "$NOTES_DIR" && git init
+# Creates FUZZPAD_DIR if it does not exist.
+if [[ ! -d "$FUZZPAD_DIR" ]]; then
+	mkdir -p "$FUZZPAD_DIR"
+	cd "$FUZZPAD_DIR" && git init
 fi
 
 trap "exit" SIGINT SIGTERM
@@ -70,36 +71,36 @@ list_order() {
 }
 
 create_new_note(){
-	${EDITOR} "$NOTES_DIR/$(get_current_date_time).$TEXT_FORMAT"
+	${EDITOR} "$FUZPAD_DIR/$(get_current_date_time).$TEXT_FORMAT"
 }
 
 open_note(){
-	NOTE=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | sort -n | cut -d ' ' -f2- | xargs -I {} basename {} | fzf --border \
+	NOTE=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | sort -n | cut -d ' ' -f2- | xargs -I {} basename {} | fzf --border \
 	--layout=reverse $(list_order) \
 	--ignore-case --prompt="Open: " \
-	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
+	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $FUZPAD_DIR/{}")
 
 	if [[ -n "$NOTE" ]]; then
-		${EDITOR} "$NOTES_DIR/$NOTE"
+		${EDITOR} "$FUZPAD_DIR/$NOTE"
 	fi
 }
 
 delete_notes(){
-	NOTES=$(find "$NOTES_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | sort -n | cut -d ' ' -f2- | xargs -I {} basename {} | fzf --border \
+	FUZPAD=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | sort -n | cut -d ' ' -f2- | xargs -I {} basename {} | fzf --border \
 	--layout=reverse $(list_order) \
 	--multi --ignore-case --prompt="Delete: " \
-	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}")
+	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $FUZPAD_DIR/{}")
 
-	if [[ -n "$NOTES" ]]; then
-		CONFIRMATION=$(printf "%s\n" "$NOTES" | while read -r file; do stat --format="%$SORT_FORMAT %n" "$NOTES_DIR/$file"; done | sort -n | cut -d ' ' -f2- | xargs -I {} basename {} | \
+	if [[ -n "$FUZPAD" ]]; then
+		CONFIRMATION=$(printf "%s\n" "$FUZPAD" | while read -r file; do stat --format="%$SORT_FORMAT %n" "$FUZPAD_DIR/$file"; done | sort -n | cut -d ' ' -f2- | xargs -I {} basename {} | \
 		fzf --print-query --border \
 		--layout=reverse $(list_order) \
 		--disabled --prompt="Type 'yes' to confirm: " \
-		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $NOTES_DIR/{}" | head -n 1)
+		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $FUZPAD_DIR/{}" | head -n 1)
 
 		if [[ "$CONFIRMATION" =~ ^[Yy][Ee][Ss]$ ]]; then
-			for NOTE in $NOTES; do
-				rm "$NOTES_DIR/$NOTE"
+			for NOTE in $FUZPAD; do
+				rm "$FUZPAD_DIR/$NOTE"
 			done
 		fi
 	fi
@@ -110,7 +111,7 @@ search_notes(){
 		if [[ -z {q} ]]; then
 			echo "Enter your query to begin searching"
 		else
-			RESULTS=$(grep -rni --include="*."'$TEXT_FORMAT' {q} '$NOTES_DIR' 2> /dev/null)
+			RESULTS=$(grep -rni --include="*."'$TEXT_FORMAT' {q} '$FUZPAD_DIR' 2> /dev/null)
 			[ -n "$RESULTS" ] && echo "Found $(echo "$RESULTS" | wc -l) results" || { echo "Found 0 results"; exit; }
 			echo "$RESULTS" |
 			while IFS=: read -r FILE_NAME LINE CONTENT; do
@@ -122,17 +123,17 @@ search_notes(){
 	--preview 'IFS=":" read -r CONTENT LINE FILE_NAME <<< {}
 		[[ -z {q} ]] && exit
 		if ! [[ -z {} ]]; then
-			MAX_LINES=$(wc -l < '$NOTES_DIR'/$FILE_NAME)
+			MAX_LINES=$(wc -l < '$FUZPAD_DIR'/$FILE_NAME)
 			START_LINE=$(($LINE > '$START_LINE_SEARCH_PREVIEW' ? $LINE - '$START_LINE_SEARCH_PREVIEW' : 1))
 			END_LINE=$(($LINE + 5 < '$END_LINE_SEARCH_PREVIEW' ? $LINE + '$END_LINE_SEARCH_PREVIEW' : MAX_LINES));
 			echo -e "\e[1m$FILE_NAME\e[0m"
 			echo
-			bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE --line-range $START_LINE:$END_LINE '$NOTES_DIR'/$FILE_NAME
+			bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE --line-range $START_LINE:$END_LINE '$FUZPAD_DIR'/$FILE_NAME
 		fi')
         
 	if [[ -n "$SELECTED" ]]; then
 		IFS=":" read -r CONTENT LINE FILE_NAME <<< $SELECTED
-		${EDITOR} +$LINE "$NOTES_DIR/$FILE_NAME"
+		${EDITOR} +$LINE "$FUZPAD_DIR/$FILE_NAME"
 	fi
 }
 
