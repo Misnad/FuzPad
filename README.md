@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
- <img src="https://i.imgur.com/5WXsOH1.png" alt="Sample Image" width="500"/>
- <img src="https://i.imgur.com/lkyY8Fe.png" alt="Sample Image" width="500"/>
- <img src="https://i.imgur.com/NMbPXN7.png" alt="Sample Image" width="500"/>
- <img src="https://i.imgur.com/5IljHKS.png" alt="Sample Image" width="500"/>
+ <img src="https://i.imgur.com/5WXsOH1.png" alt="Sample Image" width="250"/>
+ <img src="https://i.imgur.com/lkyY8Fe.png" alt="Sample Image" width="250"/>
+ <img src="https://i.imgur.com/NMbPXN7.png" alt="Sample Image" width="250"/>
+ <img src="https://i.imgur.com/5IljHKS.png" alt="Sample Image" width="250"/>
 </p>
 
 ## Features
