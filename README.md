@@ -18,10 +18,10 @@
 - **Open**: Open an existing note.
 - **Search**: Search within notes for specific content.
 - **Delete**: Delete selected notes.
+- **Version control**: automatically commits changes to your notes
 
 ## Planned Features
 - **Tags**: tagging system
-- **Version control**: utilize git for syncing notes
 - **Make an installer**: use brew for packaging
 - **CLI**: create a cli that allows piping, etc.
 
