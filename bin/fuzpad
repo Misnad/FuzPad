@@ -18,7 +18,7 @@ SORT_FORMAT=${FUZPAD_SORT_FORMAT:-"T@"}
 PREVIEW_SIZE=${FUZPAD_PREVIEW_SIZE:-"70%"}
 # Recommend 5 for start_line so user can see the highlighted line quickly in the search preview
 START_LINE_SEARCH_PREVIEW=${FUZPAD_START_LINE_SEARCH_PREVIEW:-"5"}
-END_LINE_SEARCH_PREVIEW=${FUZPAD_END_LINE_SEARCH_PREVIEW:-"9999"}
+END_LINE_SEARCH_PREVIEW=${FUZPAD_clearEND_LINE_SEARCH_PREVIEW:-"9999"}
 
 get_current_date_time() {
 	echo $(date +"$DATE_TIME_FORMAT")
@@ -71,7 +71,8 @@ list_order() {
 }
 
 create_new_note(){
-	${EDITOR} "$FUZPAD_DIR/$(get_current_date_time).$TEXT_FORMAT"
+	cd "$FUZPAD_DIR"
+	${EDITOR} "./$(get_current_date_time).$TEXT_FORMAT"
 }
 
 open_note(){
@@ -81,7 +82,9 @@ open_note(){
 	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $FUZPAD_DIR/{}")
 
 	if [[ -n "$NOTE" ]]; then
-		${EDITOR} "$FUZPAD_DIR/$NOTE"
+		cd "$FUZPAD_DIR"
+		${EDITOR} "./$NOTE"
+		
 	fi
 }
 
@@ -99,8 +102,9 @@ delete_notes(){
 		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $FUZPAD_DIR/{}" | head -n 1)
 
 		if [[ "$CONFIRMATION" =~ ^[Yy][Ee][Ss]$ ]]; then
+			cd "$FUZPAD_DIR"
 			for NOTE in $FUZPAD; do
-				rm "$FUZPAD_DIR/$NOTE"
+				rm "./$NOTE"
 			done
 		fi
 	fi
@@ -133,7 +137,8 @@ search_notes(){
         
 	if [[ -n "$SELECTED" ]]; then
 		IFS=":" read -r CONTENT LINE FILE_NAME <<< $SELECTED
-		${EDITOR} +$LINE "$FUZPAD_DIR/$FILE_NAME"
+		cd "$FUZPAD_DIR"
+		${EDITOR} +$LINE "./$FILE_NAME"
 	fi
 }
 
