@@ -25,16 +25,29 @@ get_current_date_time() {
 }
 
 # Creates FUZZPAD_DIR if it does not exist.
-if [[ ! -d "$FUZZPAD_DIR" ]]; then
-	mkdir -p "$FUZZPAD_DIR"
-	cd "$FUZZPAD_DIR" && git init
+if [[ ! -d "$FUZPAD_DIR" ]]; then
+	mkdir -p "$FUZPAD_DIR" &&
+	cd "$FUZPAD_DIR"
 fi
+
+auto_git_commit(){
+	cd "$FUZPAD_DIR" || return 1
+	if [[ -d "$FUZPAD_DIR/.git" ]]; then
+		git ls-files --others | grep -v '^$' | xargs git add > /dev/null 2>&1
+		git commit -am "$(get_current_date_time)" > /dev/null 2>&1
+	else
+		git init > /dev/null 2>&1
+		git ls-files --others | grep -v '^$' | xargs git add > /dev/null 2>&1
+		git commit -am "$(get_current_date_time)" > /dev/null 2>&1
+	fi
+}
 
 trap "exit" SIGINT SIGTERM
 
 show_menu() {
 	ACTIONS=("New" "Open" "Search" "Delete" "Quit")
 	while true; do
+		auto_git_commit
 		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --layout=reverse --prompt="Choose an action: ")
 		if [[ $? != 0 ]]; then
 			break
