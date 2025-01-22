@@ -47,7 +47,7 @@ trap "exit" SIGINT SIGTERM
 show_menu() {
 	ACTIONS=("New" "Open" "Search" "Delete" "Quit")
 	while true; do
-		auto_git_commit
+		auto_git_commit &
 		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --layout=reverse --prompt="Choose an action: ")
 		if [[ $? != 0 ]]; then
 			break
