@@ -18,7 +18,7 @@
 - **Open**: Open an existing note.
 - **Search**: Search within notes for specific content.
 - **Delete**: Delete selected notes.
-- **Version control**: automatically commits changes to your notes
+- **Version control**: automatically commits changes to your notes.
 
 ## Planned Features
 - **Tags**: tagging system
