@@ -89,7 +89,7 @@ open_note(){
 	while true; do
 		NOTE_DATA=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | \
 		sort -n | cut -d ' ' -f2- | \
-		while read -r file; do echo "$(sed -n '1p' "$file" | sed "s/://g"):$(basename "$file")"; done | fzf --border \
+		while read -r NOTE; do echo "$(sed -n '1p' "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border \
 		--layout=reverse $(list_order) \
 		--ignore-case --prompt="Open: " \
 		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
@@ -108,7 +108,7 @@ open_note(){
 delete_notes(){
 	NOTES_DATA=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | \
 	sort -n | cut -d ' ' -f2- | \
-	while read -r file; do echo "$(sed -n '1p' "$file" | sed "s/://g"):$(basename "$file")"; done | fzf --border \
+	while read -r NOTE; do echo "$(sed -n '1p' "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border \
 	--layout=reverse $(list_order) \
 	--multi --ignore-case --prompt="Delete: " \
 	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
@@ -125,9 +125,9 @@ delete_notes(){
 	done <<< "$NOTES_DATA"
 
 	if [[ -n "$NOTES" ]]; then
-		CONFIRMATION=$(printf "%s\n" "${NOTES[@]}" | while read -r file; do stat --format="%$SORT_FORMAT %n" "$FUZPAD_DIR/$file"; done | \
+		CONFIRMATION=$(printf "%s\n" "${NOTES[@]}" | while read -r file; do stat --format="%$SORT_FORMAT %n" "$FUZPAD_DIR/$NOTE"; done | \
 		sort -n | cut -d ' ' -f2- | \
-		while read -r file; do echo "$(sed -n '1p' "$file" | sed "s/://g"):$(basename "$file")"; done | \
+		while read -r NOTE; do echo "$(sed -n '1p' "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | \
 		fzf --print-query --border \
 		--layout=reverse $(list_order) \
 		--disabled --prompt="Type 'yes' to confirm: " \
@@ -181,12 +181,15 @@ search_notes(){
 				[[ -z {q} ]] && exit
 				QUERY={q}
 				if ! [[ -z {} ]]; then
-					MAX_LINES=$(wc -l < '$FUZPAD_DIR'/$NOTE)
+					TITLE=$(sed -n "1p" "'$FUZPAD_DIR'/$NOTE" | sed "s/://g")
+					MAX_LINES=$(wc -l < "'$FUZPAD_DIR'/$NOTE")
 					START_LINE=$(($LINE > '$START_LINE_SEARCH_PREVIEW' ? $LINE - '$START_LINE_SEARCH_PREVIEW' : 1))
 					END_LINE=$(($LINE + 5 < '$END_LINE_SEARCH_PREVIEW' ? $LINE + '$END_LINE_SEARCH_PREVIEW' : MAX_LINES));
 					echo -e "\e[1m$NOTE\e[0m"
 					echo
-					sed "${LINE}s/\($QUERY\)/\x1b[1;31m\1\x1b[0m/gi" '$FUZPAD_DIR'/$NOTE | bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE \
+					[ "$START_LINE" -ne 1 ] && echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
+					sed -e "1s/.*/\x1b[1m&\x1b[0m/" -e "1s/:$//" \
+					-e "${LINE}s/\($QUERY\)/\x1b[1;31m\1\x1b[0m/gi" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE \
 					--line-range $START_LINE:$END_LINE
 				fi')
 		[[ $? != 0 ]] && break
