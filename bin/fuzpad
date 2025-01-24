@@ -120,7 +120,6 @@ delete_notes(){
 	NOTES=()  
 
 	while IFS=":" read -r TITLE NOTE; do
-		echo "$NOTE"
 		NOTES+=("$NOTE") 
 	done <<< "$NOTES_DATA"
 
