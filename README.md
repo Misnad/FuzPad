@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
- <img src="https://i.imgur.com/5WXsOH1.png" alt="Sample Image" width="350"/>
- <img src="https://i.imgur.com/lkyY8Fe.png" alt="Sample Image" width="350"/>
- <img src="https://i.imgur.com/NMbPXN7.png" alt="Sample Image" width="350"/>
- <img src="https://i.imgur.com/5IljHKS.png" alt="Sample Image" width="350"/>
+ <img src="https://i.imgur.com/nmZnO5x.png" alt="Sample Image" width="350"/>
+ <img src="https://i.imgur.com/vVXmtzP.png" alt="Sample Image" width="350"/>
+ <img src="https://i.imgur.com/f7yVywE.png" alt="Sample Image" width="350"/>
+ <img src="https://i.imgur.com/x8JOUFW.png" alt="Sample Image" width="350"/>
 </p>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=JianZcar/FuzPad&type=Timeline)](https://star-history.com/#JianZcar/FuzPad&Timeline)
