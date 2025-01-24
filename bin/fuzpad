@@ -106,26 +106,41 @@ open_note(){
 }
 
 delete_notes(){
-	NOTES=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | \
+	NOTES_DATA=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | \
 	sort -n | cut -d ' ' -f2- | \
-	xargs -I {} basename {} | fzf --border \
+	while read -r file; do echo "$(sed -n '1p' "$file" | sed "s/://g"):$(basename "$file")"; done | fzf --border \
 	--layout=reverse $(list_order) \
 	--multi --ignore-case --prompt="Delete: " \
-	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $FUZPAD_DIR/{}")
+	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
+	--preview='
+		IFS=":" read -r TITLE NOTE <<< {}
+		echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
+		sed "1d" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain')
+		
+	NOTES=()  
+
+	while IFS=":" read -r TITLE NOTE; do
+		echo "$NOTE"
+		NOTES+=("$NOTE") 
+	done <<< "$NOTES_DATA"
 
 	if [[ -n "$NOTES" ]]; then
-		CONFIRMATION=$(printf "%s\n" "$NOTES" | while read -r file; do stat --format="%$SORT_FORMAT %n" "$FUZPAD_DIR/$file"; done | \
+		CONFIRMATION=$(printf "%s\n" "${NOTES[@]}" | while read -r file; do stat --format="%$SORT_FORMAT %n" "$FUZPAD_DIR/$file"; done | \
 		sort -n | cut -d ' ' -f2- | \
-		xargs -I {} basename {} | \
+		while read -r file; do echo "$(sed -n '1p' "$file" | sed "s/://g"):$(basename "$file")"; done | \
 		fzf --print-query --border \
 		--layout=reverse $(list_order) \
 		--disabled --prompt="Type 'yes' to confirm: " \
-		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $FUZPAD_DIR/{}" | sed -n '1p')
+		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
+		--preview='
+			IFS=":" read -r TITLE NOTE <<< {}
+			echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
+			sed "1d" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain' | sed -n '1p')
 
 		if [[ "$CONFIRMATION" =~ ^[Yy][Ee][Ss]$ ]]; then
 			cd "$FUZPAD_DIR"
-			for NOTE in $NOTES; do
-				rm "./$NOTE"
+			for NOTE in "${NOTES[@]}"; do
+				rm "./$NOTE"	
 			done
 		fi
 	fi
@@ -141,9 +156,9 @@ search_notes(){
 				[ -n "$RESULTS" ] && echo "Found $(echo "$RESULTS" | wc -l) results" || \
 				{ echo "Found 0 results"; exit; }
 				echo "$RESULTS" |
-				while IFS=: read -r FILE_NAME LINE CONTENT; do
+				while IFS=: read -r NOTE LINE CONTENT; do
 					CLEANED_CONTENT=$(echo "$CONTENT" | sed "s/://g")
-					echo "$CLEANED_CONTENT:$LINE:$(basename "$FILE_NAME")"
+					echo "$CLEANED_CONTENT:$LINE:$(basename "$NOTE")"
 				done
 			fi | \
 			fzf --print-query --query="$LAST_QUERY" \
@@ -155,31 +170,31 @@ search_notes(){
 					[ -n "$RESULTS" ] && echo "Found $(echo "$RESULTS" | wc -l) results" || \
 					{ echo "Found 0 results"; exit; }
 					echo "$RESULTS" |
-					while IFS=: read -r FILE_NAME LINE CONTENT; do
+					while IFS=: read -r NOTE LINE CONTENT; do
 						CLEANED_CONTENT=$(echo "$CONTENT" | sed "s/://g")
-						echo "$CLEANED_CONTENT:$LINE:$(basename "$FILE_NAME")"
+						echo "$CLEANED_CONTENT:$LINE:$(basename "$NOTE")"
 					done
 				fi)' \
 			--border --layout=reverse --no-info --preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
 			--ignore-case --header-lines=1 --prompt="Search: " \
-			--preview 'IFS=":" read -r CONTENT LINE FILE_NAME <<< {}
+			--preview 'IFS=":" read -r CONTENT LINE NOTE <<< {}
 				[[ -z {q} ]] && exit
 				QUERY={q}
 				if ! [[ -z {} ]]; then
-					MAX_LINES=$(wc -l < '$FUZPAD_DIR'/$FILE_NAME)
+					MAX_LINES=$(wc -l < '$FUZPAD_DIR'/$NOTE)
 					START_LINE=$(($LINE > '$START_LINE_SEARCH_PREVIEW' ? $LINE - '$START_LINE_SEARCH_PREVIEW' : 1))
 					END_LINE=$(($LINE + 5 < '$END_LINE_SEARCH_PREVIEW' ? $LINE + '$END_LINE_SEARCH_PREVIEW' : MAX_LINES));
-					echo -e "\e[1m$FILE_NAME\e[0m"
+					echo -e "\e[1m$NOTE\e[0m"
 					echo
-					sed "${LINE}s/\($QUERY\)/\x1b[1;31m\1\x1b[0m/gi" '$FUZPAD_DIR'/$FILE_NAME | bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE \
+					sed "${LINE}s/\($QUERY\)/\x1b[1;31m\1\x1b[0m/gi" '$FUZPAD_DIR'/$NOTE | bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE \
 					--line-range $START_LINE:$END_LINE
 				fi')
 		[[ $? != 0 ]] && break
 		
 		LAST_QUERY="$(echo "$SELECTED" | sed -n '1p')"
-		IFS=":" read -r CONTENT LINE FILE_NAME <<< $(echo "$SELECTED" | sed -n '2p')
+		IFS=":" read -r CONTENT LINE NOTE <<< $(echo "$SELECTED" | sed -n '2p')
 		cd "$FUZPAD_DIR"
-		${EDITOR} +$LINE "./$FILE_NAME"
+		${EDITOR} +$LINE "./$NOTE"
 	done
 	LAST_QUERY=""
 }
