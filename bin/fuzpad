@@ -87,15 +87,20 @@ create_new_note(){
 
 open_note(){
 	while true; do
-		NOTE=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | \
+		NOTE_DATA=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | \
 		sort -n | cut -d ' ' -f2- | \
-		xargs -I {} basename {} | fzf --border \
+		while read -r file; do echo "$(sed -n '1p' "$file" | sed "s/://g"):$(basename "$file")"; done | fzf --border \
 		--layout=reverse $(list_order) \
 		--ignore-case --prompt="Open: " \
-		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap --preview="bat --color=always --theme=$BAT_THEME --style=plain $FUZPAD_DIR/{}")
+		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
+		--preview='
+			IFS=":" read -r TITLE NOTE <<< {}
+			echo -e "\e[1m$TITLE\e[0m" | bat
+			sed "1d" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain')
 		[[ $? != 0 ]] && break
 		
 		cd "$FUZPAD_DIR"
+		IFS=":" read -r TITLE NOTE <<< "$NOTE_DATA"
 		${EDITOR} "./$NOTE"
 	done
 }
@@ -141,7 +146,7 @@ search_notes(){
 					echo "$CLEANED_CONTENT:$LINE:$(basename "$FILE_NAME")"
 				done
 			fi | \
-			fzf --print-query --query=$LAST_QUERY \
+			fzf --print-query --query="$LAST_QUERY" \
 			--bind 'change:reload(
 				if [[ -z {q} ]]; then
 					echo "Enter your query to begin searching"
@@ -175,8 +180,8 @@ search_notes(){
 		IFS=":" read -r CONTENT LINE FILE_NAME <<< $(echo "$SELECTED" | sed -n '2p')
 		cd "$FUZPAD_DIR"
 		${EDITOR} +$LINE "./$FILE_NAME"
-		
 	done
+	LAST_QUERY=""
 }
 
 show_menu
