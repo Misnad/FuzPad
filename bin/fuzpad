@@ -125,7 +125,7 @@ delete_notes(){
 	done <<< "$NOTES_DATA"
 
 	if [[ -n "$NOTES" ]]; then
-		CONFIRMATION=$(printf "%s\n" "${NOTES[@]}" | while read -r file; do stat --format="%$SORT_FORMAT %n" "$FUZPAD_DIR/$NOTE"; done | \
+		CONFIRMATION=$(printf "%s\n" "${NOTES[@]}" | while read -r NOTE; do stat --format="%$SORT_FORMAT %n" "$FUZPAD_DIR/$NOTE"; done | \
 		sort -n | cut -d ' ' -f2- | \
 		while read -r NOTE; do echo "$(sed -n '1p' "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | \
 		fzf --print-query --border \
