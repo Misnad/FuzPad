@@ -189,10 +189,10 @@ search_notes(){
 					[ "$START_LINE" -ne 1 ] && echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
 					[	"$LINE" -eq 1 ] && \
 						sed -e "1s/:$//" \
-						-e "${LINE}s/\($QUERY\)/\x1b[1;31m\1\x1b[0m\x1b[1m/gi" \
-						-e "${LINE}s/$/\x1b[0m/" \
+						-e "${LINE}s/.*/\x1b[1m&\x1b[0m/" \
+						-e "${LINE}s/\($QUERY\)/\x1b[31m\1\x1b[0m\x1b[1m/gi" \
 						"'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE \
-						--line-range $START_LINE:$END_LINE
+						--line-range $START_LINE:$END_LINE && exit
 		
 					sed -e "1s/.*/\x1b[1m&\x1b[0m/" -e "1s/:$//" \
 					-e "${LINE}s/\($QUERY\)/\x1b[1;31m\1\x1b[0m/gi" \
