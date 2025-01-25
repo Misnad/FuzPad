@@ -1,23 +1,15 @@
 #!/bin/bash
 
-# Set the SHELL environment variable, fixes POSIX-incompatible shells
-SHELL=/bin/bash
-
-# Default directory to scan (change to your default directory if needed).
+SHELL=/bin/bash # Set the SHELL environment variable, fixes POSIX-incompatible shells
 FUZPAD_DIR="${FUZPAD_DIR:-"$HOME/Documents/.notes"}"
 TEXT_FORMAT="${FUZPAD_TEXT_FORMAT:-"txt"}"
 EDITOR="${EDITOR:-"nano"}"
 DATE_TIME_FORMAT="${FUZPAD_DATE_TIME_FORMAT:-"%Y-%m-%d-%H-%M-%S"}"
 BAT_THEME="${FUZPAD_BAT_THEME:-"OneHalfLight"}"
-
-# Only applies to open and delete (default is false)
-REVERSE_LIST=${FUZPAD_REVERSE_LIST:-"false"}
-# 'T@' or 'W' for creation date, 'Y' for modified date (default is W)
-SORT_FORMAT=${FUZPAD_SORT_FORMAT:-"T@"}
-
+REVERSE_LIST=${FUZPAD_REVERSE_LIST:-"false"} # Only applies to open and delete (default is false)
+SORT_FORMAT=${FUZPAD_SORT_FORMAT:-"T@"} # 'T@' or 'W' for creation date, 'Y' for modified date (default is W)
 PREVIEW_SIZE=${FUZPAD_PREVIEW_SIZE:-"70%"}
-# Recommend 5 for start_line so user can see the highlighted line quickly in the search preview
-START_LINE_SEARCH_PREVIEW=${FUZPAD_START_LINE_SEARCH_PREVIEW:-"5"}
+START_LINE_SEARCH_PREVIEW=${FUZPAD_START_LINE_SEARCH_PREVIEW:-"5"} # Recommend 5 for start_line so user can see the highlighted line quickly in the search preview
 END_LINE_SEARCH_PREVIEW=${FUZPAD_END_LINE_SEARCH_PREVIEW:-"9999"}
 
 get_current_date_time() {
@@ -26,12 +18,12 @@ get_current_date_time() {
 
 # Creates FUZZPAD_DIR if it does not exist.
 if [[ ! -d "$FUZPAD_DIR" ]]; then
-	mkdir -p "$FUZPAD_DIR" &&
-	cd "$FUZPAD_DIR"
+	mkdir -p "$FUZPAD_DIR"
 fi
 
+cd "$FUZPAD_DIR"
+
 auto_git_commit(){
-	cd "$FUZPAD_DIR" || return 1
 	if [[ -d "$FUZPAD_DIR/.git" ]]; then
 		git ls-files --others | grep -v '^$' | xargs git add > /dev/null 2>&1
 		git commit -am "$(get_current_date_time)" > /dev/null 2>&1
@@ -48,40 +40,22 @@ show_menu() {
 		auto_git_commit &
 		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --layout=reverse --prompt="Choose an action: ")
 		[[ $? != 0 ]] && break
-		
 		case $SELECTED_ACTION in
-			"New")
-				create_new_note
-				;;
-			"Open")
-				open_note
-				;;
-			"Search")
-				search_notes
-				;;
-			"Delete")
-				delete_notes
-				;;
-			"Quit")
-				break
-				;;
-			*)
-				echo "Invalid action"
-				;;
+			"New") create_new_note ;;
+			"Open") open_note ;;
+			"Search") search_notes ;;
+			"Delete") delete_notes ;;
+			"Quit") break ;;
 		esac
 	done
 }
 
 list_order() {
-  if [ ! "$REVERSE_LIST" = true ]; then
-    echo "--tac"
-  else
-    echo ""
-  fi
+  [ ! "$REVERSE_LIST" = true ] && echo "--tac" && exit
+  echo ""
 }
 
 create_new_note(){
-	cd "$FUZPAD_DIR"
 	${EDITOR} "./$(get_current_date_time).$TEXT_FORMAT"
 }
 
@@ -99,7 +73,6 @@ open_note(){
 			sed "1d" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain')
 		[[ $? != 0 ]] && break
 		
-		cd "$FUZPAD_DIR"
 		IFS=":" read -r TITLE NOTE <<< "$NOTE_DATA"
 		${EDITOR} "./$NOTE"
 	done
@@ -137,7 +110,6 @@ delete_notes(){
 			sed "1d" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain' | sed -n '1p')
 
 		if [[ "$CONFIRMATION" =~ ^[Yy][Ee][Ss]$ ]]; then
-			cd "$FUZPAD_DIR"
 			for NOTE in "${NOTES[@]}"; do
 				rm "./$NOTE"	
 			done
@@ -203,7 +175,6 @@ search_notes(){
 		
 		LAST_QUERY="$(echo "$SELECTED" | sed -n '1p')"
 		IFS=":" read -r CONTENT LINE NOTE <<< $(echo "$SELECTED" | sed -n '2p')
-		cd "$FUZPAD_DIR"
 		${EDITOR} +$LINE "./$NOTE"
 	done
 	LAST_QUERY=""
