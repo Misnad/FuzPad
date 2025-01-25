@@ -51,8 +51,7 @@ show_menu() {
 }
 
 list_order() {
-  [ ! "$REVERSE_LIST" = true ] && echo "--tac" && exit
-  echo ""
+  [ ! "$REVERSE_LIST" = true ] && echo "--tac"
 }
 
 create_new_note(){
