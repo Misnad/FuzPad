@@ -1,5 +1,4 @@
-name: Tag Automation
-
+name: Auto Tag
 on:
   schedule:
     - cron: '0 0 * * 1'  # Runs every Monday at midnight UTC
