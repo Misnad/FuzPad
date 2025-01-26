@@ -78,7 +78,7 @@ jobs:
 
       - name: Move updated formula to homebrew-packages 
         run: |
-          mv fuzpad.rb homebrew-packages /Formula/fuzpad.rb
+          mv fuzpad.rb homebrew-packages/Formula/fuzpad.rb
 
       - name: Commit and push changes
         env:
