@@ -14,11 +14,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Ruby and github_changelog_generator
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ruby-full build-essential
-          gem install github_changelog_generator
+      - name: Install GitHub Changelog Generator
+        run: gem install github_changelog_generator
 
       - name: Create Package
         run: tar -czf fuzpad-${{ github.ref_name }}.tar.gz --exclude LICENSE --exclude README.md *
