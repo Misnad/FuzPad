@@ -32,6 +32,7 @@
 ## Requirements
 
 - Bash
+- Git
 - [fzf](https://github.com/junegunn/fzf) (fuzzy finder)
 - [bat](https://github.com/sharkdp/bat) (for enhanced preview)
 - Your preferred text editor (default is `nano`)
