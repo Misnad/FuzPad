@@ -12,6 +12,11 @@ PREVIEW_SIZE=${FUZPAD_PREVIEW_SIZE:-"70%"}
 START_LINE_SEARCH_PREVIEW=${FUZPAD_START_LINE_SEARCH_PREVIEW:-"5"} # Recommend 5 for start_line so user can see the highlighted line quickly in the search preview
 END_LINE_SEARCH_PREVIEW=${FUZPAD_END_LINE_SEARCH_PREVIEW:-"9999"}
 
+if [[ "$1" == "--test" ]]; then
+   echo "1"
+   exit 0
+fi
+
 get_current_date_time() {
 	echo $(date +"$DATE_TIME_FORMAT")
 }
