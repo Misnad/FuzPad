@@ -21,8 +21,7 @@ jobs:
         id: check-changes
         run: |
           git fetch
-          LATEST_TAG=${{ steps.get-latest-tag.outputs.LATEST_TAG }}
-          CHANGED_FILES=$(git log $LATEST_TAG..HEAD --format="%H" --reverse --no-merges)
+          CHANGED_FILES=$(git log ${{ env.LATEST_TAG }}..HEAD --format="%H" --reverse --no-merges)
           if [ -z "$CHANGED_FILES" ]; then
             echo "No changes detected. Exiting."
             exit 0
@@ -31,12 +30,11 @@ jobs:
       - name: Generate new tag
         id: new-tag
         run: |
-          LATEST_TAG=${{ steps.get-latest-tag.outputs.LATEST_TAG }} 
-          MAJOR_VERSION=$(echo $LATEST_TAG | awk -F. '{print $1}')
-          MINOR_VERSION=$(echo $LATEST_TAG | awk -F. '{print $2}')
+          MAJOR_VERSION=$(echo ${{ env.LATEST_TAG }} | awk -F. '{print $1}')
+          MINOR_VERSION=$(echo ${{ env.LATEST_TAG }} | awk -F. '{print $2}')
           NEW_MINOR_VERSION=$((MINOR_VERSION + 1))
           NEW_TAG="$MAJOR_VERSION.$NEW_MINOR_VERSION.00"
-          echo Latest: $LATEST_TAG
+          echo Latest: ${{ env.LATEST_TAG }}
           echo NEW: $NEW_TAG
           echo "::set-output name=NEW_TAG::$NEW_TAG"
 

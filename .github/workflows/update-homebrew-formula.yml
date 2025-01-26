@@ -24,13 +24,13 @@ jobs:
       - name: Update Homebrew Formula
         run: |
           LATEST_TAG=${{ steps.get-latest-tag.outputs.LATEST_TAG }} 
-          SHA256=$(curl -sL https://github.com/JianZcar/FuzPad/releases/download/$LATEST_TAG/fuzpad-$LATEST_TAG.tar.gz | sha256sum | awk '{print $1}')
+          SHA256=$(curl -sL https://github.com/JianZcar/FuzPad/releases/download/${{ env.LATEST_TAG }}/fuzpad-${{ env.LATEST_TAG }}.tar.gz | sha256sum | awk '{print $1}')
           
           cat > fuzpad.rb <<EOF
           class Fuzpad < Formula
             desc "Minimalistic note management solution. Powered by fzf"
             homepage "https://github.com/JianZcar/FuzPad"
-            url "https://github.com/JianZcar/FuzPad/releases/download/$LATEST_TAG/fuzpad-$LATEST_TAG.tar.gz"
+            url "https://github.com/JianZcar/FuzPad/releases/download/${{ env.LATEST_TAG }}/fuzpad-${{ env.LATEST_TAG }}.tar.gz"
             sha256 "$SHA256"
             license "GPL-3.0-or-later"
 
