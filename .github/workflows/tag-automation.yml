@@ -3,6 +3,7 @@ name: Tag Automation
 on:
   schedule:
     - cron: '0 0 * * 1'  # Runs every Monday at midnight UTC
+  workflow_dispatch: 
 
 jobs:
   generate-tag:
@@ -11,6 +12,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          git fetch
+          CHANGED_FILES=$(git diff --name-only HEAD HEAD~1)
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No changes detected. Exiting."
+            exit 0
+          fi
 
       - name: Get the latest tag
         id: get-latest-tag
