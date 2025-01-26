@@ -1,9 +1,10 @@
 name: Update Homebrew Formula
 
 on:
-  release:
-    types: [published]
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
 
 jobs:
   update-formula:
@@ -59,7 +60,7 @@ jobs:
             depends_on "fzf"
 
             def install
-              bin.install "bin/fuzpad"
+              bin.install "fuzpad"
             end
 
             test do
