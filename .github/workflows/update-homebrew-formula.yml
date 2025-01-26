@@ -18,16 +18,25 @@ jobs:
         with:
           ruby-version: 3.0
 
+      - name: Setup GitHub CLI
+        uses: cli/cli-action@v2
+
+      - name: Get latest release tag
+        id: get_latest_release
+        run: |
+          latest_release=$(gh release view --json tagName --jq '.tagName')
+          echo "Latest release tag: $latest_release"
+          echo "tag=$latest_release" >> $GITHUB_ENV
+
       - name: Update Homebrew Formula
         run: |
-          VERSION=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
-          SHA256=$(curl -sL https://github.com/JianZcar/FuzPad/releases/download/$VERSION/fuzpad-$VERSION.tar.gz | sha256sum | awk '{print $1}')
+          SHA256=$(curl -sL https://github.com/JianZcar/FuzPad/releases/download/${{ env.tag }}/fuzpad-${{ env.tag }}.tar.gz | sha256sum | awk '{print $1}')
           
           cat > .formula/fuzpad.rb <<EOF
           class Fuzpad < Formula
             desc "Minimalistic note management solution. Powered by fzf"
             homepage "https://github.com/JianZcar/FuzPad"
-            url "https://github.com/JianZcar/FuzPad/releases/download/$VERSION/fuzpad-$VERSION.tar.gz"
+            url "https://github.com/JianZcar/FuzPad/releases/download/${{ env.tag }}/fuzpad-${{ env.tag }}.tar.gz"
             sha256 "$SHA256"
             license "GPL-3.0-or-later"
 
@@ -54,5 +63,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .formula/fuzpad.rb
-          git commit -m "Update Homebrew formula for version $VERSION"
+          git commit -m "Update Homebrew formula for version ${{ env.tag }}"
           git push
