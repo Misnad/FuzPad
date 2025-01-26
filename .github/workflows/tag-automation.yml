@@ -35,7 +35,7 @@ jobs:
         run: |
           MAJOR_VERSION=$(echo ${{ env.LATEST_TAG }} | awk -F. '{print $1}')
           MINOR_VERSION=$(echo ${{ env.LATEST_TAG }} | awk -F. '{print $2}')
-          NEW_MINOR_VERSION=$((MINOR_VERSION + 1))
+          NEW_MINOR_VERSION=$(printf "%02d" $((10#$MINOR_VERSION + 1)))
           NEW_TAG="$MAJOR_VERSION.$NEW_MINOR_VERSION.00"
           echo Latest: ${{ env.LATEST_TAG }}
           echo NEW: $NEW_TAG
