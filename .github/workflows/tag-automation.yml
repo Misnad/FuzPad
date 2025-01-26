@@ -13,19 +13,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Get the latest tag
+        id: get-latest-tag
+        run: echo "::set-output name=LATEST_TAG::$(git tag --sort=-creatordate | head -n 1)"
+
       - name: Check for changes
         id: check-changes
         run: |
           git fetch
-          CHANGED_FILES=$(git diff --name-only HEAD HEAD~1)
+          LATEST_TAG=${{ steps.get-latest-tag.outputs.LATEST_TAG }}
+          CHANGED_FILES=$(git log $LATEST_TAG..HEAD --format="%H" --reverse --no-merges)
           if [ -z "$CHANGED_FILES" ]; then
             echo "No changes detected. Exiting."
             exit 0
           fi
-
-      - name: Get the latest tag
-        id: get-latest-tag
-        run: echo "::set-output name=LATEST_TAG::$(git tag --sort=-creatordate | head -n 1)"
 
       - name: Generate new tag
         id: new-tag
