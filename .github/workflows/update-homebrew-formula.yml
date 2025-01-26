@@ -19,7 +19,7 @@ jobs:
           ruby-version: 3.0
 
       - name: Setup GitHub CLI
-        uses: cli/cli-action@v2
+        uses: actions/setup-gh@v2
 
       - name: Get latest release tag
         id: get_latest_release
