@@ -23,7 +23,7 @@ jobs:
       - name: Generate Changelog
         id: changelog
         run: |
-          github_changelog_generator -u JianZcar -p FuzPad
+          github_changelog_generator -u JianZcar -p FuzPad -t ${{ secrets.TOKEN }}
           mv CHANGELOG.md CHANGELOG-${{ github.ref_name }}.md
         continue-on-error: true
 
@@ -34,4 +34,4 @@ jobs:
           body_path: CHANGELOG.md
           files: fuzpad-${{ github.ref_name }}.tar.gz
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
