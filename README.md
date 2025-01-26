@@ -22,7 +22,6 @@
 
 ## Planned Features
 - **Tags**: tagging system
-- **Make an installer**: use brew for packaging
 - **CLI**: create a cli that allows piping, etc.
 
 ## Goals
