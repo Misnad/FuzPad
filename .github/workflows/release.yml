@@ -1,10 +1,6 @@
 name: Release
 
 on:
-  workflow_run:
-    workflows: ["Tag Automation"]
-    types:
-      - completed
   push:
     tags:
       - '**'
@@ -31,7 +27,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: steps.changelog.outcome == 'success'
         with:
-          tag_name: ${{ github.ref_name }}
           body_path: CHANGELOG.md
           files: fuzpad-${{ github.ref_name }}.tar.gz
         env:
