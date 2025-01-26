@@ -49,7 +49,7 @@ brew install JianZcar/packages/fuzpad
 1. Clone the repository:
 
 ```sh
-git clone https://github.com/JianZcar/notes-bash.git
+git clone https://github.com/JianZcar/FuzPad.git
 cd notes-bash
 ```
 
