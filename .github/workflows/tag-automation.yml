@@ -36,7 +36,8 @@ jobs:
           MINOR_VERSION=$(echo $LATEST_TAG | awk -F. '{print $2}')
           NEW_MINOR_VERSION=$((MINOR_VERSION + 1))
           NEW_TAG="$MAJOR_VERSION.$NEW_MINOR_VERSION.00"
-          echo $NEW_TAG
+          echo Latest: $LATEST_TAG
+          echo NEW: $NEW_TAG
           echo "::set-output name=NEW_TAG::$NEW_TAG"
 
       - name: Create new tag
