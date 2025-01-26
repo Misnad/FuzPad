@@ -19,7 +19,7 @@ jobs:
 
       - name: Get latest release tag
         run: |
-          latest_release=$(git describe --tags --abbrev=0)
+          latest_release=$(git tag --sort=-creatordate | head -n 1)
           echo "Latest release tag: $latest_release"
           echo "tag=$latest_release" >> $GITHUB_ENV
 
