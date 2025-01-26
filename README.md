@@ -37,7 +37,15 @@
 - [bat](https://github.com/sharkdp/bat) (for enhanced preview)
 - Your preferred text editor (default is `nano`)
 
-## Usage
+## Installation
+
+### Using Homebrew
+
+```sh
+brew install JianZcar/packages/fuzpad
+```
+
+### Manual Installation
 
 1. Clone the repository:
 
