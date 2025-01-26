@@ -17,21 +17,20 @@ jobs:
           fetch-depth: 0
           ref: main 
 
-      - name: Get latest release tag
-        run: |
-          latest_release=$(git tag --sort=-creatordate | head -n 1)
-          echo "Latest release tag: $latest_release"
-          echo "tag=$latest_release" >> $GITHUB_ENV
+      - name: Get the latest tag
+        id: get-latest-tag
+        run: echo "::set-output name=LATEST_TAG::$(git tag --sort=-creatordate | head -n 1)"
 
       - name: Update Homebrew Formula
         run: |
-          SHA256=$(curl -sL https://github.com/JianZcar/FuzPad/releases/download/${{ env.tag }}/fuzpad-${{ env.tag }}.tar.gz | sha256sum | awk '{print $1}')
+          LATEST_TAG=${{ steps.get-latest-tag.outputs.LATEST_TAG }} 
+          SHA256=$(curl -sL https://github.com/JianZcar/FuzPad/releases/download/$LATEST_TAG/fuzpad-$LATEST_TAG.tar.gz | sha256sum | awk '{print $1}')
           
           cat > fuzpad.rb <<EOF
           class Fuzpad < Formula
             desc "Minimalistic note management solution. Powered by fzf"
             homepage "https://github.com/JianZcar/FuzPad"
-            url "https://github.com/JianZcar/FuzPad/releases/download/${{ env.tag }}/fuzpad-${{ env.tag }}.tar.gz"
+            url "https://github.com/JianZcar/FuzPad/releases/download/$LATEST_TAG/fuzpad-$LATEST_TAG.tar.gz"
             sha256 "$SHA256"
             license "GPL-3.0-or-later"
 
