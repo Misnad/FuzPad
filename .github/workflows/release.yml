@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install GitHub Changelog Generator
-        run: gem install github_changelog_generator
+        run: sudo gem install github_changelog_generator
 
       - name: Create Package
         run: tar -czf fuzpad-${{ github.ref_name }}.tar.gz --exclude LICENSE --exclude README.md *
@@ -23,7 +23,7 @@ jobs:
       - name: Generate Changelog
         id: changelog
         run: |
-          ~/.gem/ruby/*/bin/github_changelog_generator -u JianZcar -p FuzPad
+          github_changelog_generator -u JianZcar -p FuzPad
           mv CHANGELOG.md CHANGELOG-${{ github.ref_name }}.md
         continue-on-error: true
 
