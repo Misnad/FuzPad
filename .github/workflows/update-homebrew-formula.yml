@@ -56,12 +56,3 @@ jobs:
           git add .formula/fuzpad.rb
           git commit -m "Update Homebrew formula for version $VERSION"
           git push
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.TOKEN }}
-          commit-message: "Update Homebrew formula for version $VERSION"
-          title: "Update Homebrew formula for version $VERSION"
-          body: "This PR updates the Homebrew formula for the new release version $VERSION."
-          branch: "update-homebrew-formula-$VERSION"
