@@ -125,9 +125,9 @@ source ~/.bashrc
 
 ## Updates
 
+- **Major Updates**: No clear dates at the moment.
 - **Minor Updates**: Released every Monday.
 - **Patch Updates**: Released as soon as possible.
-- **Major Updates**: No clear dates at the moment.
 
 ## Contributing
 
