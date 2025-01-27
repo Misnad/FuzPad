@@ -83,7 +83,7 @@ open_note(){
 }
 
 delete_notes(){
-	NOTES_DATA=$(find "$FUZPAD_DIR" -type f -regex '.*\.\(txt\|md\|org\)$' -exec stat --format="%$SORT_FORMAT %n" {} \; | \
+	NOTES_DATA=$(ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | \
 	sort -n | cut -d ' ' -f2- | \
 	while read -r NOTE; do echo "$(sed -n '1p' "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border \
 	--layout=reverse $(list_order) \
