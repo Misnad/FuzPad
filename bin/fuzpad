@@ -65,7 +65,7 @@ create_new_note(){
 
 open_note(){
 	while true; do
-		NOTE_DATA=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | \
+		NOTE_DATA=$(find "$FUZPAD_DIR" -type f -regex '.*\.\(txt\|md\|org\)$' -exec stat --format="%$SORT_FORMAT %n" {} \; | \
 		sort -n | cut -d ' ' -f2- | \
 		while read -r NOTE; do echo "$(sed -n '1p' "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border \
 		--layout=reverse $(list_order) \
@@ -83,7 +83,7 @@ open_note(){
 }
 
 delete_notes(){
-	NOTES_DATA=$(find "$FUZPAD_DIR" -type f -name "*.$TEXT_FORMAT" -exec stat --format="%$SORT_FORMAT %n" {} \; | \
+	NOTES_DATA=$(find "$FUZPAD_DIR" -type f -regex '.*\.\(txt\|md\|org\)$' -exec stat --format="%$SORT_FORMAT %n" {} \; | \
 	sort -n | cut -d ' ' -f2- | \
 	while read -r NOTE; do echo "$(sed -n '1p' "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border \
 	--layout=reverse $(list_order) \
@@ -127,7 +127,7 @@ search_notes(){
 			if [[ -z "$LAST_QUERY" ]]; then
 				echo "Enter your query to begin searching"
 			else
-				RESULTS=$(grep -rni --include="*.""$TEXT_FORMAT" "$LAST_QUERY" "$FUZPAD_DIR" 2> /dev/null)
+				RESULTS=$(grep -rni --include=*.{txt,md,org} "$LAST_QUERY" "$FUZPAD_DIR" 2> /dev/null)
 				[ -n "$RESULTS" ] && echo "Found $(echo "$RESULTS" | wc -l) results" || \
 				{ echo "Found 0 results"; exit; }
 				echo "$RESULTS" |
@@ -141,7 +141,7 @@ search_notes(){
 				if [[ -z {q} ]]; then
 					echo "Enter your query to begin searching"
 				else
-					RESULTS=$(grep -rni --include="*."'$TEXT_FORMAT' {q} '$FUZPAD_DIR' 2> /dev/null)
+					RESULTS=$(grep -rni --include=*.{txt,md,org} {q} '$FUZPAD_DIR' 2> /dev/null)
 					[ -n "$RESULTS" ] && echo "Found $(echo "$RESULTS" | wc -l) results" || \
 					{ echo "Found 0 results"; exit; }
 					echo "$RESULTS" |
