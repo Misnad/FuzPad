@@ -123,7 +123,15 @@ After adding the necessary variables to your `~/.bashrc` file, remember to sourc
 source ~/.bashrc
 ```
 
+## Updates
+
+- **Major Updates**: No clear dates at the moment.
+- **Minor Updates**: Released every Monday.
+- **Patch Updates**: Released as soon as possible.
+
 ## Contributing
+
+We welcome contributions from the community! Please refer to the [Contributing Guidelines](CONTRIBUTING.md) for more details on how to get started.
 
 Feel free to fork the repository and submit pull requests. Contributions are welcome!
 

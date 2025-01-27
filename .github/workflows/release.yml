@@ -16,7 +16,7 @@ jobs:
           ref: main 
 
       - name: Create Package
-        run: tar -czf fuzpad-${{ github.ref_name }}.tar.gz --exclude LICENSE --exclude README.md *
+        run: tar -czf fuzpad-${{ github.ref_name }}.tar.gz --exclude LICENSE --exclude README.md --exclude CODE_OF_CONDUCT.md --exclude CONTRIBUTING.md *
 
       - name: Generate Changelog
         id: changelog
