@@ -40,17 +40,17 @@ auto_git_commit(){
 }
 
 show_menu() {
-	ACTIONS=("New" "Open" "Search" "Delete" "Quit")
+	ACTIONS=("📕 New    " "📖 Open   " "🔎 Search " "🔥 Delete " "❌ Quit   ")
 	while true; do
 		auto_git_commit &
 		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --layout=reverse --prompt="Choose an action: ")
 		[[ $? != 0 ]] && break
 		case $SELECTED_ACTION in
-			"New") create_new_note ;;
-			"Open") open_note ;;
-			"Search") search_notes ;;
-			"Delete") delete_notes ;;
-			"Quit") break ;;
+			"📕 New    ") create_new_note ;;
+			"📖 Open   ") open_note ;;
+			"🔎 Search ") search_notes ;;
+			"🔥 Delete ") delete_notes ;;
+			"❌ Quit   ") break ;;
 		esac
 	done
 }
