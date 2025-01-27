@@ -125,6 +125,8 @@ source ~/.bashrc
 
 ## Contributing
 
+We welcome contributions from the community! Please refer to the [Contributing Guidelines](CONTRIBUTING.md) for more details on how to get started.
+
 Feel free to fork the repository and submit pull requests. Contributions are welcome!
 
 ## License
