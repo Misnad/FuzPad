@@ -5,7 +5,7 @@ FUZPAD_DIR="${FUZPAD_DIR:-"$HOME/Documents/.notes"}"
 TEXT_FORMAT="${FUZPAD_TEXT_FORMAT:-"txt"}"
 EDITOR="${EDITOR:-"nano"}"
 DATE_TIME_FORMAT="${FUZPAD_DATE_TIME_FORMAT:-"%Y-%m-%d-%H-%M-%S"}"
-ICON=${FUZPAD_ICON:-"1"} # 1 to use the icon and 0 to not use the icon
+ICON=${FUZPAD_ICON:-"0"} # 1 to use the icon and 0 to not use the icon
 BAT_THEME="${FUZPAD_BAT_THEME:-"OneHalfLight"}"
 REVERSE_LIST=${FUZPAD_REVERSE_LIST:-"false"} # Only applies to open and delete (default is false)
 SORT_FORMAT=${FUZPAD_SORT_FORMAT:-"T@"} # 'T@' or 'W' for creation date, 'Y' for modified date (default is W)
@@ -40,25 +40,29 @@ auto_git_commit(){
 	fi
 }
 
+render_icon(){
+	[ "$ICON" -eq 1 ] && echo "$1 "
+}
+
 show_menu() {
-	ACTIONS=("$([ "$ICON" -eq 1 ] && echo '📕 ')New" "$([ "$ICON" -eq 1 ] && echo '📖 ')Open" \
-					"$([ "$ICON" -eq 1 ] && echo '🔎 ')Search" "$([ "$ICON" -eq 1 ] && echo '🔥 ')Delete" \
-					"$([ "$ICON" -eq 1 ] && echo '❌ ')Quit")
+	ACTIONS=("$(render_icon '📕')New" "$(render_icon '📖')Open" \
+					"$(render_icon '🔎')Search" "$(render_icon '🔥')Delete" \
+					"$(render_icon '❌')Quit")
 	while true; do
 		auto_git_commit &
 		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --border-label="FuzPad" --border-label-pos=0 \
 		--layout=reverse --highlight-line --padding=0,30%)
 		[[ $? != 0 ]] && break
 		case $SELECTED_ACTION in
-			"$([ "$ICON" -eq 1 ] && echo '📕 ')New") 
+			"$(render_icon '📕')New") 
 				create_new_note ;;
-			"$([ "$ICON" -eq 1 ] && echo '📖 ')Open") 
+			"$(render_icon '📖')Open") 
 				open_note ;;
-			"$([ "$ICON" -eq 1 ] && echo '🔎 ')Search") 
+			"$(render_icon '🔎')Search") 
 				search_notes ;;
-			"$([ "$ICON" -eq 1 ] && echo '🔥 ')Delete") 
+			"$(render_icon '🔥')Delete") 
 				delete_notes ;;
-			"$([ "$ICON" -eq 1 ] && echo '❌ ')Quit") 
+			"$(render_icon '❌')Quit") 
 				break ;;
 		esac
 	done
@@ -80,7 +84,7 @@ open_note(){
 		--border-label-pos=0 \
 		--highlight-line \
 		--layout=reverse $(list_order) \
-		--ignore-case --prompt="$([ "$ICON" -eq 1 ] && echo '📖 ')Open > " \
+		--ignore-case --prompt="$(render_icon '📖')Open > " \
 		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
 		--preview='
 			IFS=":" read -r TITLE NOTE <<< {}
@@ -100,7 +104,7 @@ delete_notes(){
 	--border-label-pos=0 \
 	--highlight-line \
 	--layout=reverse $(list_order) \
-	--multi --ignore-case --prompt="$([ "$ICON" -eq 1 ] && echo '🔥 ')Delete > " \
+	--multi --ignore-case --prompt="$(render_icon '🔥')Delete > " \
 	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
 	--preview='
 		IFS=":" read -r TITLE NOTE <<< {}
@@ -167,7 +171,7 @@ search_notes(){
 				fi)' \
 			--border --border-label="FuzPad" --border-label-pos=0 \
 			--highlight-line --layout=reverse --no-info --preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
-			--ignore-case --header-lines=1 --prompt="$([ "$ICON" -eq 1 ] && echo '🔎 ')Search > " \
+			--ignore-case --header-lines=1 --prompt="$(render_icon '🔎')Search > " \
 			--preview 'IFS=":" read -r CONTENT LINE NOTE <<< {}
 				[[ -z {q} ]] && exit
 				QUERY={q}
