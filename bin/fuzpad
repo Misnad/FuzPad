@@ -5,6 +5,7 @@ FUZPAD_DIR="${FUZPAD_DIR:-"$HOME/Documents/.notes"}"
 TEXT_FORMAT="${FUZPAD_TEXT_FORMAT:-"txt"}"
 EDITOR="${EDITOR:-"nano"}"
 DATE_TIME_FORMAT="${FUZPAD_DATE_TIME_FORMAT:-"%Y-%m-%d-%H-%M-%S"}"
+ICON=${FUZPAD_ICON:-"1"} # 1 to use the icon and 0 to not use the icon
 BAT_THEME="${FUZPAD_BAT_THEME:-"OneHalfLight"}"
 REVERSE_LIST=${FUZPAD_REVERSE_LIST:-"false"} # Only applies to open and delete (default is false)
 SORT_FORMAT=${FUZPAD_SORT_FORMAT:-"T@"} # 'T@' or 'W' for creation date, 'Y' for modified date (default is W)
@@ -40,18 +41,25 @@ auto_git_commit(){
 }
 
 show_menu() {
-	ACTIONS=("📕 New" "📖 Open" "🔎 Search" "🔥 Delete" "❌ Quit")
+	ACTIONS=("$([ "$ICON" -eq 1 ] && echo '📕 ')New" "$([ "$ICON" -eq 1 ] && echo '📖 ')Open" \
+					"$([ "$ICON" -eq 1 ] && echo '🔎 ')Search" "$([ "$ICON" -eq 1 ] && echo '🔥 ')Delete" \
+					"$([ "$ICON" -eq 1 ] && echo '❌ ')Quit")
 	while true; do
 		auto_git_commit &
 		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --border-label="FuzPad" --border-label-pos=0 \
 		--layout=reverse --highlight-line --padding=0,30%)
 		[[ $? != 0 ]] && break
 		case $SELECTED_ACTION in
-			"📕 New") create_new_note ;;
-			"📖 Open") open_note ;;
-			"🔎 Search") search_notes ;;
-			"🔥 Delete") delete_notes ;;
-			"❌ Quit") break ;;
+			"$([ "$ICON" -eq 1 ] && echo '📕 ')New") 
+				create_new_note ;;
+			"$([ "$ICON" -eq 1 ] && echo '📖 ')Open") 
+				open_note ;;
+			"$([ "$ICON" -eq 1 ] && echo '🔎 ')Search") 
+				search_notes ;;
+			"$([ "$ICON" -eq 1 ] && echo '🔥 ')Delete") 
+				delete_notes ;;
+			"$([ "$ICON" -eq 1 ] && echo '❌ ')Quit") 
+				break ;;
 		esac
 	done
 }
@@ -72,7 +80,7 @@ open_note(){
 		--border-label-pos=0 \
 		--highlight-line \
 		--layout=reverse $(list_order) \
-		--ignore-case --prompt="📖 Open > " \
+		--ignore-case --prompt="$([ "$ICON" -eq 1 ] && echo '📖 ')Open > " \
 		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
 		--preview='
 			IFS=":" read -r TITLE NOTE <<< {}
@@ -92,7 +100,7 @@ delete_notes(){
 	--border-label-pos=0 \
 	--highlight-line \
 	--layout=reverse $(list_order) \
-	--multi --ignore-case --prompt="🔥 Delete > " \
+	--multi --ignore-case --prompt="$([ "$ICON" -eq 1 ] && echo '🔥 ')Delete > " \
 	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
 	--preview='
 		IFS=":" read -r TITLE NOTE <<< {}
@@ -159,7 +167,7 @@ search_notes(){
 				fi)' \
 			--border --border-label="FuzPad" --border-label-pos=0 \
 			--highlight-line --layout=reverse --no-info --preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
-			--ignore-case --header-lines=1 --prompt="🔎 Search > " \
+			--ignore-case --header-lines=1 --prompt="$([ "$ICON" -eq 1 ] && echo '🔎 ')Search > " \
 			--preview 'IFS=":" read -r CONTENT LINE NOTE <<< {}
 				[[ -z {q} ]] && exit
 				QUERY={q}
@@ -170,7 +178,7 @@ search_notes(){
 					END_LINE=$(($LINE + 5 < '$END_LINE_SEARCH_PREVIEW' ? $LINE + '$END_LINE_SEARCH_PREVIEW' : MAX_LINES))
 					echo -e "\e[1m$NOTE\e[0m"; echo
 					[ "$START_LINE" -ne 1 ] && echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
-					[	"$LINE" -eq 1 ] && \
+					[ "$LINE" -eq 1 ] && \
 					sed -e "1s/:$//" -e "${LINE}s/.*/\x1b[1m&\x1b[0m/" -e "${LINE}s/\($QUERY\)/\x1b[31m\1\x1b[0m\x1b[1m/gi" \
 					"'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$LINE \
 					--line-range $START_LINE:$END_LINE && exit
