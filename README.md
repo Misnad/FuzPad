@@ -45,6 +45,11 @@
 brew install JianZcar/packages/fuzpad
 ```
 
+### One Line Command
+```bash
+curl -s https://gist.githubusercontent.com/JianZcar/df050e108b462e469f413f0eec229143/raw | bash
+```
+
 ### Manual Installation
 
 1. Clone the repository:
