@@ -2,10 +2,11 @@
 
 SHELL=/bin/bash # Set the SHELL environment variable, fixes POSIX-incompatible shells
 FUZPAD_DIR="${FUZPAD_DIR:-"$HOME/Documents/.notes"}"
+AUTO_GIT="${FUZPAD_AUTO_GIT:-"1"}"
 TEXT_FORMAT="${FUZPAD_TEXT_FORMAT:-"txt"}"
 EDITOR="${EDITOR:-"nano"}"
 DATE_TIME_FORMAT="${FUZPAD_DATE_TIME_FORMAT:-"%Y-%m-%d-%H-%M-%S"}"
-ICON=${FUZPAD_ICON:-"0"} # 1 to use the icon and 0 to not use the icon
+ICON=${FUZPAD_ICON:-"1"} # 1 to use the icon and 0 to not use the icon
 BAT_THEME="${FUZPAD_BAT_THEME:-"OneHalfLight"}"
 REVERSE_LIST=${FUZPAD_REVERSE_LIST:-"false"} # Only applies to open and delete (default is false)
 SORT_FORMAT=${FUZPAD_SORT_FORMAT:-"T@"} # 'T@' or 'W' for creation date, 'Y' for modified date (default is W)
@@ -30,6 +31,9 @@ fi
 cd "$FUZPAD_DIR"
 
 auto_git_commit(){
+	if ! command -v git &> /dev/null || [ "$AUTO_GIT" != "1" ]; then
+    exit
+	fi
 	if [[ -d "$FUZPAD_DIR/.git" ]]; then
 		git ls-files --others | grep -v '^$' | xargs git add > /dev/null 2>&1
 		git commit -am "$(get_current_date_time)" > /dev/null 2>&1
