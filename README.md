@@ -54,6 +54,8 @@ brew install JianZcar/packages/fuzpad
 ```
 
 ### Using curl
+
+~/.local/bin must be in your PATH
 ```bash
 curl -s https://gist.githubusercontent.com/JianZcar/df050e108b462e469f413f0eec229143/raw | bash
 ```
