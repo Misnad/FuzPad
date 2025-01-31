@@ -5,6 +5,10 @@
 </p>
 
 <p align="center">
+    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="Download FuzPad" src="https://a.fsdn.com/con/app/sf-download-button" width=276 height=48 srcset="https://a.fsdn.com/con/app/sf-download-button?button_size=2x 2x"></a>
+</p>
+
+<p align="center">
  <img src="https://i.imgur.com/nmZnO5x.png" alt="Sample Image" width="350"/>
  <img src="https://i.imgur.com/vVXmtzP.png" alt="Sample Image" width="350"/>
  <img src="https://i.imgur.com/f7yVywE.png" alt="Sample Image" width="350"/>
