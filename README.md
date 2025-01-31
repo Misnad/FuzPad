@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="Download FuzPad" src="https://a.fsdn.com/con/app/sf-download-button" width=276 height=48 srcset="https://a.fsdn.com/con/app/sf-download-button?button_size=2x 2x"></a>
+    <a href="https://sourceforge.net/p/fuzpad/"><img alt="Download FuzPad" src="https://sourceforge.net/sflogo.php?type=17&amp;group_id=3845250" width=200></a>
 </p>
 
 <p align="center">
@@ -42,6 +42,10 @@
 - Your preferred text editor (default is `nano`)
 
 ## Installation
+
+<p align="center">
+    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="Download FuzPad" src="https://a.fsdn.com/con/app/sf-download-button" width=276 height=48 srcset="https://a.fsdn.com/con/app/sf-download-button?button_size=2x 2x"></a>
+</p>
 
 ### Using Homebrew
 
