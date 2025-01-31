@@ -72,13 +72,13 @@ cd FuzPad
 2. Make the script executable:
 
 ```sh
-chmod +x bin/notes
+chmod +x bin/fuzpad
 ```
 
 3. Run the script:
 
 ```sh
-./bin/notes
+./bin/fuzpad
 ```
 
 ## Configuration
