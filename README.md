@@ -66,7 +66,7 @@ curl -s https://gist.githubusercontent.com/JianZcar/df050e108b462e469f413f0eec22
 
 ```sh
 git clone https://github.com/JianZcar/FuzPad.git
-cd notes-bash
+cd FuzPad
 ```
 
 2. Make the script executable:
