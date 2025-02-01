@@ -9,6 +9,10 @@
 </p>
 
 <p align="center">
+    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="Download FuzPad" src="https://img.shields.io/sourceforge/dt/fuzpad.svg" ></a>
+</p>
+
+<p align="center">
  <img src="https://i.imgur.com/nmZnO5x.png" alt="Sample Image" width="350"/>
  <img src="https://i.imgur.com/vVXmtzP.png" alt="Sample Image" width="350"/>
  <img src="https://i.imgur.com/f7yVywE.png" alt="Sample Image" width="350"/>
