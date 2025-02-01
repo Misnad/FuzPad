@@ -9,7 +9,8 @@
 </p>
 
 <p align="center">
-    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="Download FuzPad" src="https://img.shields.io/sourceforge/dt/fuzpad.svg" ></a>
+    <img alt="SourForgeDownloads" src="https://img.shields.io/sourceforge/dt/fuzpad?label=SourceForge%20downloads&color=rgb(255%2C128%2C0)">
+    <img alt="GithubDownloads" src="https://img.shields.io/github/downloads/JianZcar/FuzPad/total?label=Github%20downloads&color=rgb(77%2C153%2C0)">
 </p>
 
 <p align="center">
