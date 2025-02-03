@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+    <img alt="Linux" src="https://img.shields.io/badge/OS-Linux-%23FCC624?logo=linux">
+    <img alt="MacOS" src="https://img.shields.io/badge/OS-MacOS-%23000000?logo=apple&logoSize=apple">
+</p>
+
+<p align="center">
     <img alt="SourForgeDownloads" src="https://img.shields.io/sourceforge/dt/fuzpad?label=SourceForge%20downloads&color=rgb(255%2C128%2C0)">
     <img alt="GithubDownloads" src="https://img.shields.io/github/downloads/JianZcar/FuzPad/total?label=Github%20downloads&color=rgb(77%2C153%2C0)">
 </p>
