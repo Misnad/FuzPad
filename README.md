@@ -10,7 +10,7 @@
 
 <p align="center">
     <img alt="Linux" src="https://img.shields.io/badge/OS-Linux-%23FCC624?logo=linux">
-    <img alt="MacOS" src="https://img.shields.io/badge/OS-MacOS-%23000000?logo=apple&logoSize=apple">
+    <img alt="MacOS" src="https://img.shields.io/badge/OS-MacOS-%23000000?logo=apple">
 </p>
 
 <p align="center">
