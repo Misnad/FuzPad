@@ -14,10 +14,10 @@
 </p>
 
 <p align="center">
- <img src="https://i.imgur.com/nmZnO5x.png" alt="Sample Image" width="350"/>
- <img src="https://i.imgur.com/vVXmtzP.png" alt="Sample Image" width="350"/>
- <img src="https://i.imgur.com/f7yVywE.png" alt="Sample Image" width="350"/>
- <img src="https://i.imgur.com/x8JOUFW.png" alt="Sample Image" width="350"/>
+ <img src="https://i.imgur.com/R9pqs64.png" alt="Sample Image" width="350"/>
+ <img src="https://i.imgur.com/Z37EN4X.png" alt="Sample Image" width="350"/>
+ <img src="https://i.imgur.com/ApBLiQo.png" alt="Sample Image" width="350"/>
+ <img src="https://i.imgur.com/Sks2irE.png" alt="Sample Image" width="350"/>
 </p>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=JianZcar/FuzPad&type=Timeline)](https://star-history.com/#JianZcar/FuzPad&Timeline)
