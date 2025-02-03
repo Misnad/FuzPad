@@ -154,6 +154,10 @@ source ~/.bashrc
 - **Minor Updates**: Released every Monday.
 - **Patch Updates**: Released as soon as possible.
 
+## Support
+- ⭐ If you like the project, please leave a star!
+- 💖 Consider becoming a sponsor to support ongoing development.
+
 ## Contributing
 
 We welcome contributions from the community! Please refer to the [Contributing Guidelines](CONTRIBUTING.md) for more details on how to get started.
