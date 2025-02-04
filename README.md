@@ -19,6 +19,8 @@
 </p>
 
 <p align="center">
+    <img alt="ReleaseStatus" src="https://img.shields.io/github/actions/workflow/status/JianZcar/FuzPad/release.yml?label=Release">
+    <img alt="HomebrewStatus" src="https://img.shields.io/github/actions/workflow/status/JianZcar/FuzPad/homebrew.yml?label=Homebrew">
     <img alt="CommitsSinceLatestRelease" src="https://img.shields.io/github/commits-since/JianZcar/FuzPad/latest">
 </p>
 
