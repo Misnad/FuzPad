@@ -3,32 +3,31 @@
 <p align="center">
     <em>FuzPad is a minimalistic note management solution. Powered by ⚡<a href="https://github.com/junegunn/fzf">junegunn/fzf</a></em>⚡
 </p>
-
 <p align="center">
     <a href="https://sourceforge.net/p/fuzpad/"><img alt="Download FuzPad" src="https://sourceforge.net/sflogo.php?type=17&amp;group_id=3845250" width=200></a>
+    <br>
+    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="SourForgeDownloads" src="https://img.shields.io/sourceforge/dt/FuzPad?style=social&logo=sourceforge"></a>
+    <a href="https://github.com/JianZcar/FuzPad/releases/latest"><img alt="GithubDownloads" src="https://img.shields.io/github/downloads/JianZcar/Fuzpad/total?style=social&logo=github"></a>
 </p>
 
 <p align="center">
-    <img alt="Linux" src="https://img.shields.io/badge/OS-Linux-%23FCC624?logo=linux">
-    <img alt="MacOS" src="https://img.shields.io/badge/OS-MacOS-%23000000?logo=apple">
-</p>
-
-<p align="center">
-    <img alt="SourForgeDownloads" src="https://img.shields.io/sourceforge/dt/fuzpad?label=SourceForge%20downloads&color=rgb(255%2C128%2C0)">
-    <img alt="GithubDownloads" src="https://img.shields.io/github/downloads/JianZcar/FuzPad/total?label=Github/Brew%20downloads&color=rgb(77%2C153%2C0)">
+    <img alt="Linux" src="https://img.shields.io/badge/-LINUX-%23404040?style=for-the-badge&logo=linux">
+    <img alt="MacOS" src="https://img.shields.io/badge/-MACOS-%23404040?style=for-the-badge&logo=apple">
 </p>
 
 <p align="center">
     <img alt="ReleaseStatus" src="https://img.shields.io/github/actions/workflow/status/JianZcar/FuzPad/release.yml?label=Release">
     <img alt="HomebrewStatus" src="https://img.shields.io/github/actions/workflow/status/JianZcar/FuzPad/homebrew.yml?label=Homebrew">
-    <img alt="CommitsSinceLatestRelease" src="https://img.shields.io/github/commits-since/JianZcar/FuzPad/latest">
+    <br>
+    <img alt="CommitsSinceLatestRelease" src="https://img.shields.io/github/commits-since/JianZcar/FuzPad/latest?style=social">
 </p>
 
 <p align="center">
- <img src="https://i.imgur.com/R9pqs64.png" alt="Sample Image" width="350"/>
- <img src="https://i.imgur.com/Z37EN4X.png" alt="Sample Image" width="350"/>
- <img src="https://i.imgur.com/ApBLiQo.png" alt="Sample Image" width="350"/>
- <img src="https://i.imgur.com/Sks2irE.png" alt="Sample Image" width="350"/>
+    <img src="https://i.imgur.com/R9pqs64.png" alt="Sample Image" width="350"/>
+    <img src="https://i.imgur.com/Z37EN4X.png" alt="Sample Image" width="350"/>
+    <br>
+    <img src="https://i.imgur.com/ApBLiQo.png" alt="Sample Image" width="350"/>
+    <img src="https://i.imgur.com/Sks2irE.png" alt="Sample Image" width="350"/>
 </p>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=JianZcar/FuzPad&type=Timeline)](https://star-history.com/#JianZcar/FuzPad&Timeline)
