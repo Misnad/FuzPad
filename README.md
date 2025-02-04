@@ -19,6 +19,10 @@
 </p>
 
 <p align="center">
+    <img alt="CommitsSinceLatestRelease" src="https://img.shields.io/github/commits-since/JianZcar/FuzPad/latest">
+</p>
+
+<p align="center">
  <img src="https://i.imgur.com/R9pqs64.png" alt="Sample Image" width="350"/>
  <img src="https://i.imgur.com/Z37EN4X.png" alt="Sample Image" width="350"/>
  <img src="https://i.imgur.com/ApBLiQo.png" alt="Sample Image" width="350"/>
