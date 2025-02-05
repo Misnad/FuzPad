@@ -9,7 +9,7 @@ DATE_TIME_FORMAT="${FUZPAD_DATE_TIME_FORMAT:-"%Y-%m-%d-%H-%M-%S"}"
 ICON=${FUZPAD_ICON:-"1"} # 1 to use the icon and 0 to not use the icon
 BAT_THEME="${FUZPAD_BAT_THEME:-"OneHalfLight"}"
 REVERSE_LIST=${FUZPAD_REVERSE_LIST:-"false"} # Only applies to open and delete (default is false)
-SORT_FORMAT=${FUZPAD_SORT_FORMAT:-"T@"} # 'T@' or 'W' for creation date, 'Y' for modified date (default is W)
+SORT_FORMAT=${FUZPAD_SORT_FORMAT:-"T@"} # 'T@' or 'W' for creation date, 'Y' for modified date (default is T@)
 PREVIEW_SIZE=${FUZPAD_PREVIEW_SIZE:-"70%"}
 START_LINE_SEARCH_PREVIEW=${FUZPAD_START_LINE_SEARCH_PREVIEW:-"5"} # Recommend 5 for start_line so user can see the highlighted line quickly in the search preview
 END_LINE_SEARCH_PREVIEW=${FUZPAD_END_LINE_SEARCH_PREVIEW:-"9999"}
@@ -82,7 +82,7 @@ create_new_note(){
 
 open_note(){
 	while true; do
-		NOTE_DATA=$(ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | \
+		NOTE_DATA=$(ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | while read -r NOTE; do stat --format="%$SORT_FORMAT %n" "$FUZPAD_DIR/$NOTE"; done | \
 		sort -n | cut -d ' ' -f2- | \
 		while read -r NOTE; do echo "$(sed -n '1p' "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border --border-label="FuzPad" \
 		--border-label-pos=0 \
@@ -102,7 +102,7 @@ open_note(){
 }
 
 delete_notes(){
-	NOTES_DATA=$(ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | \
+	NOTES_DATA=$(ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | while read -r NOTE; do stat --format="%$SORT_FORMAT %n" "$FUZPAD_DIR/$NOTE"; done | \
 	sort -n | cut -d ' ' -f2- | \
 	while read -r NOTE; do echo "$(sed -n '1p' "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border --border-label="FuzPad" \
 	--border-label-pos=0 \
