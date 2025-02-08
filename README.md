@@ -11,8 +11,8 @@
 </p>
 
 <p align="center">
-    <img alt="Linux" src="https://img.shields.io/badge/-LINUX-%23404040?style=for-the-badge&logo=linux">
-    <img alt="MacOS" src="https://img.shields.io/badge/-MACOS-%23404040?style=for-the-badge&logo=apple">
+    <img alt="Linux" src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
+    <img alt="MacOS" src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0">
 </p>
 
 <p align="center">
