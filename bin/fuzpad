@@ -55,7 +55,8 @@ show_menu() {
 	while true; do
 		auto_git_commit &
 		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --border-label="FuzPad" --border-label-pos=0 \
-		--layout=reverse --highlight-line --padding=0,30%)
+		--layout=reverse --highlight-line --padding=0,30% \
+		--bind "j:down,k:up" )
 		[[ $? != 0 ]] && break
 		case $SELECTED_ACTION in
 			"$(render_icon '📕')New") 
