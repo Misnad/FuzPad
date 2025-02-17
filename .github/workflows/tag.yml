@@ -33,6 +33,7 @@ jobs:
 
       - name: Generate new tag
         id: new-tag
+        if: steps.check-changes.outputs.changed_files != ''
         run: |
           MAJOR_VERSION=$(echo ${{ env.LATEST_TAG }} | awk -F. '{print $1}')
           MINOR_VERSION=$(echo ${{ env.LATEST_TAG }} | awk -F. '{print $2}')
