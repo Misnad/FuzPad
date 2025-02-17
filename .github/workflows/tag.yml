@@ -24,7 +24,8 @@ jobs:
         id: check-changes
         run: |
           git fetch
-          CHANGED_FILES=$(git log ${{ env.LATEST_TAG }}..HEAD --format="%H" --reverse --no-merges)
+          LATEST_TAG=$(echo $LATEST_TAG)
+          CHANGED_FILES=$(git log ${LATEST_TAG}..HEAD --format="%H" --reverse --no-merges)
           if [ -z "$CHANGED_FILES" ]; then
             echo "No changes detected. Exiting."
             exit 0
