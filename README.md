@@ -9,6 +9,9 @@
     <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="SourForgeDownloads" src="https://img.shields.io/sourceforge/dt/FuzPad?style=social&logo=sourceforge"></a>
     <a href="https://github.com/JianZcar/FuzPad/releases/latest"><img alt="GithubDownloads" src="https://img.shields.io/github/downloads/JianZcar/Fuzpad/total?style=social&logo=github"></a>
 </p>
+<p align="center">
+    🎉 Over 100 Downloads 🎉
+</p>
 
 <p align="center">
     <img alt="Linux" src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
