@@ -41,10 +41,11 @@
 - **Search**: Search within notes for specific content.
 - **Delete**: Delete selected notes.
 - **Version control**: Automatically commits changes to your notes.
+- **Tags**: Tagging system to organize notes.
+- **Icons**: Visual icons for better user experience.
 
 ## Planned Features
-- **Tags**: tagging system
-- **CLI**: create a cli that allows piping, etc.
+- **CLI**: Create a CLI that allows piping, etc.
 
 ## Goals
 
@@ -62,7 +63,7 @@
 ## Installation
 
 <p align="center">
-    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="Download FuzPad" src="https://a.fsdn.com/con/app/sf-download-button" width=276 height=48 srcset="https://a.fsdn.com/con/app/sf-download-button?button_size=2x 2x"></a>
+    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="Download FuzPad" src="https://a.fsdn.com/con/app/sf-download-button" width=276 height=48 srcset="https://a.fsdn.co[...]
 </p>
 
 ### Using Homebrew
@@ -131,7 +132,7 @@ chmod +x bin/fuzpad
   export FUZPAD_REVERSE_LIST="false"
   ```
 
-- **Sort Format**: Change the sorting format for listing notes (`T@` for creation date, `Y` for modified date) by modifying the `SORT_FORMAT` variable in the script or by setting it in your `~/.bashrc` file:
+- **Sort Format**: Change the sorting format for listing notes (`T@` for creation date, `Y` for modified date) by modifying the `SORT_FORMAT` variable in the script or by setting it in your `~/.bashrc[...]
   ```sh
   export FUZPAD_SORT_FORMAT="T@"
   ```
@@ -149,6 +150,11 @@ chmod +x bin/fuzpad
 - **End Line Search Preview**: Set the ending line number for the search preview by modifying the `END_LINE_SEARCH_PREVIEW` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
   export FUZPAD_END_LINE_SEARCH_PREVIEW="9999"
+  ```
+
+- **Icons**: Turn icons on or off by modifying the `FUZPAD_ICON` variable in the script or by setting it in your `~/.bashrc` file:
+  ```sh
+  export FUZPAD_ICON="1"  # Set to "0" to turn off icons
   ```
 
 After adding the necessary variables to your `~/.bashrc` file, remember to source it to apply the changes:
