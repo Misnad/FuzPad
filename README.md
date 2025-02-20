@@ -47,6 +47,18 @@
 ## Planned Features
 - **CLI**: Create a CLI that allows piping, etc.
 
+## How to tag a note
+
+1. **Create or Open a Note**: Select "New" to create a new note or "Open" to edit an existing note.
+2. **Add a Tag**: In the note, ensure the tag is on the 2nd line right after the title. Use the format `#tag`. For example:
+   ```
+   My Note Title
+   #important
+   This is the content of the note.
+   ```
+
+This will help you organize and search your notes using tags.
+
 ## Goals
 
 - Provide a straightforward and minimalistic note management solution using a Bash script.
