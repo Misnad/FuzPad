@@ -41,10 +41,23 @@
 - **Search**: Search within notes for specific content.
 - **Delete**: Delete selected notes.
 - **Version control**: Automatically commits changes to your notes.
+- **Tags**: Tagging system to organize notes.
+- **Icons**: Visual icons for better user experience.
 
 ## Planned Features
-- **Tags**: tagging system
-- **CLI**: create a cli that allows piping, etc.
+- **CLI**: Create a CLI that allows piping, etc.
+
+## How to tag a note
+
+1. **Create or Open a Note**: Select "New" to create a new note or "Open" to edit an existing note.
+2. **Add a Tag**: In the note, ensure the tag is on the 2nd line right after the title. Use the format `#tag`. For example:
+   ```
+   My Note Title
+   #important
+   This is the content of the note.
+   ```
+
+This will help you organize and search your notes using tags.
 
 ## Goals
 
@@ -55,6 +68,7 @@
 
 - Bash
 - Git (optional)
+- grep
 - [fzf](https://github.com/junegunn/fzf) (fuzzy finder)
 - [bat](https://github.com/sharkdp/bat) (for enhanced preview)
 - Your preferred text editor (default is `nano`)
@@ -131,7 +145,7 @@ chmod +x bin/fuzpad
   export FUZPAD_REVERSE_LIST="false"
   ```
 
-- **Sort Format**: Change the sorting format for listing notes (`T@` for creation date, `Y` for modified date) by modifying the `SORT_FORMAT` variable in the script or by setting it in your `~/.bashrc` file:
+- **Sort Format**: Change the sorting format for listing notes (`T@` for creation date, `Y` for modified date) by modifying the `SORT_FORMAT` variable in the script or by setting it in your `~/.bashrc[...]
   ```sh
   export FUZPAD_SORT_FORMAT="T@"
   ```
@@ -149,6 +163,11 @@ chmod +x bin/fuzpad
 - **End Line Search Preview**: Set the ending line number for the search preview by modifying the `END_LINE_SEARCH_PREVIEW` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
   export FUZPAD_END_LINE_SEARCH_PREVIEW="9999"
+  ```
+
+- **Icons**: Turn icons on or off by modifying the `FUZPAD_ICON` variable in the script or by setting it in your `~/.bashrc` file:
+  ```sh
+  export FUZPAD_ICON="1"  # Set to "0" to turn off icons
   ```
 
 After adding the necessary variables to your `~/.bashrc` file, remember to source it to apply the changes:
