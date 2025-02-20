@@ -50,7 +50,7 @@ render_icon(){
 
 show_menu() {
 	ACTIONS=("$(render_icon '📕')New" "$(render_icon '📖')Open" \
-					"$(render_icon '📑')Tags" "$(render_icon '🔎')Search" \
+					"$(render_icon '🏷️')Tags" "$(render_icon '🔎')Search" \
 					"$(render_icon '🔥')Delete" "$(render_icon '❌')Quit")
 	while true; do
 		auto_git_commit &
@@ -62,7 +62,7 @@ show_menu() {
 				create_new_note ;;
 			"$(render_icon '📖')Open") 
 				open_note ;;
-			"$(render_icon '📑')Tags") 
+			"$(render_icon '🏷️')Tags") 
 				open_tags ;;
 			"$(render_icon '🔎')Search") 
 				search_notes ;;
