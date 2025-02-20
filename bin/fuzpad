@@ -50,8 +50,8 @@ render_icon(){
 
 show_menu() {
 	ACTIONS=("$(render_icon '📕')New" "$(render_icon '📖')Open" \
-					"$(render_icon '🔎')Search" "$(render_icon '🔥')Delete" \
-					"$(render_icon '❌')Quit")
+					"$(render_icon '📑')Tags" "$(render_icon '🔎')Search" \
+					"$(render_icon '🔥')Delete" "$(render_icon '❌')Quit")
 	while true; do
 		auto_git_commit &
 		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --border-label="FuzPad" --border-label-pos=0 \
@@ -62,6 +62,8 @@ show_menu() {
 				create_new_note ;;
 			"$(render_icon '📖')Open") 
 				open_note ;;
+			"$(render_icon '📑')Tags") 
+				open_tags ;;
 			"$(render_icon '🔎')Search") 
 				search_notes ;;
 			"$(render_icon '🔥')Delete") 
@@ -203,6 +205,11 @@ search_notes(){
 		${EDITOR} +$LINE "./$NOTE"
 	done
 	LAST_QUERY=""
+}
+
+open_tags(){
+	ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | while read -r file; do sed -n '2p' "$FUZPAD_DIR/$file" | grep -oE '#[A-Za-z0-9_]+'; done | sort -u | \
+	fzf --border --border-label="FuzPad" --border-label-pos=0 --layout=reverse --highlight-line --padding=0,30%
 }
 
 show_menu
