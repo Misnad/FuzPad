@@ -56,6 +56,7 @@
 
 - Bash
 - Git (optional)
+- grep
 - [fzf](https://github.com/junegunn/fzf) (fuzzy finder)
 - [bat](https://github.com/sharkdp/bat) (for enhanced preview)
 - Your preferred text editor (default is `nano`)
@@ -63,7 +64,7 @@
 ## Installation
 
 <p align="center">
-    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="Download FuzPad" src="https://a.fsdn.com/con/app/sf-download-button" width=276 height=48 srcset="https://a.fsdn.co[...]
+    <a href="https://sourceforge.net/projects/fuzpad/files/latest/download"><img alt="Download FuzPad" src="https://a.fsdn.com/con/app/sf-download-button" width=276 height=48 srcset="https://a.fsdn.com/con/app/sf-download-button?button_size=2x 2x"></a>
 </p>
 
 ### Using Homebrew
