@@ -145,11 +145,6 @@ chmod +x bin/fuzpad
   export FUZPAD_REVERSE_LIST="false"
   ```
 
-- **Sort Format**: Change the sorting format for listing notes (`T@` for creation date, `Y` for modified date) by modifying the `SORT_FORMAT` variable in the script or by setting it in your `~/.bashrc[...]
-  ```sh
-  export FUZPAD_SORT_FORMAT="T@"
-  ```
-
 - **Preview Size**: Change the size of the preview window for `fzf` by modifying the `PREVIEW_SIZE` variable in the script or by setting it in your `~/.bashrc` file:
   ```sh
   export FUZPAD_PREVIEW_SIZE="70%"
