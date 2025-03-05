@@ -69,7 +69,7 @@ This will help you organize and search your notes using tags.
 - Bash
 - Git (optional)
 - grep
-- [fzf](https://github.com/junegunn/fzf) (fuzzy finder)
+- [fzf](https://github.com/junegunn/fzf) (fuzzy finder)(Latest)
 - [bat](https://github.com/sharkdp/bat) (for enhanced preview)
 - Your preferred text editor (default is `nano`)
 
