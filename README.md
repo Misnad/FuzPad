@@ -33,7 +33,7 @@
     <img src="https://i.imgur.com/Sks2irE.png" alt="Sample Image" width="350"/>
 </p>
 
-[![Star History Chart](https://api.star-history.com/svg?repos=JianZcar/FuzPad&type=Timeline)](https://star-history.com/#JianZcar/FuzPad&Timeline)
+[![Star History Chart](https://api.star-history.com/svg?repos=JianZcar/FuzPad&type=Date)](https://star-history.com/#JianZcar/FuzPad&Date)
 
 ## Features
 - **New**: Create a new note with the current date and time as the filename.
