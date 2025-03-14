@@ -26,11 +26,13 @@
 </p>
 
 <p align="center">
-    <img src="https://i.imgur.com/R9pqs64.png" alt="Sample Image" width="350"/>
-    <img src="https://i.imgur.com/Z37EN4X.png" alt="Sample Image" width="350"/>
+    <img src="https://i.imgur.com/bSydyHY.png" alt="Sample Image" width="350"/>
     <br>
-    <img src="https://i.imgur.com/ApBLiQo.png" alt="Sample Image" width="350"/>
-    <img src="https://i.imgur.com/Sks2irE.png" alt="Sample Image" width="350"/>
+    <img src="https://i.imgur.com/x7BiCmn.png" alt="Sample Image" width="350"/>
+    <img src="https://i.imgur.com/bQzZKsX.png" alt="Sample Image" width="350"/>
+    <br>
+    <img src="https://i.imgur.com/50qKVyw.png" alt="Sample Image" width="350"/>
+    <img src="https://i.imgur.com/FsV69UX.png" alt="Sample Image" width="350"/>
 </p>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=JianZcar/FuzPad&type=Date)](https://star-history.com/#JianZcar/FuzPad&Date)
