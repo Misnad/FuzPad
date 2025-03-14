@@ -10,7 +10,7 @@
     <a href="https://github.com/JianZcar/FuzPad/releases/latest"><img alt="GithubDownloads" src="https://img.shields.io/github/downloads/JianZcar/Fuzpad/total?style=social&logo=github"></a>
 </p>
 <p align="center">
-    🎉 Over 100 Downloads 🎉
+    🎉 Over 200 Downloads 🎉
 </p>
 
 <p align="center">
