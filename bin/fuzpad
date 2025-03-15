@@ -115,7 +115,7 @@ create_new_note(){
 
 open_note(){
 	while true; do
-		NOTE_DATA=$(ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | \
+		NOTE_DATA=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | \
 		while read -r NOTE; do echo "$(get_title "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border --border-label="FuzPad" \
 		--border-label-pos=0 \
 		--highlight-line \
@@ -135,7 +135,7 @@ open_note(){
 }
 
 delete_notes(){
-	NOTES_DATA=$(ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | \
+	NOTES_DATA=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | \
 	while read -r NOTE; do echo "$(get_title "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border --border-label="FuzPad" \
 	--border-label-pos=0 \
 	--highlight-line \
@@ -184,7 +184,7 @@ search_notes(){
 			if [[ -z "$LAST_QUERY" ]]; then
 				echo "Enter your query to begin searching"
 			else
-				RESULTS=$(grep -rni --include=*.{txt,md,org} "$LAST_QUERY" "$FUZPAD_DIR" 2> /dev/null)
+				RESULTS=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | xargs grep -ni "$LAST_QUERY"  2> /dev/null)
 				[ -n "$RESULTS" ] && echo "Found $(echo "$RESULTS" | wc -l) results" || \
 				{ echo "Found 0 results"; exit; }
 				echo "$RESULTS" |
@@ -198,7 +198,8 @@ search_notes(){
 				if [[ -z {q} ]]; then
 					echo "Enter your query to begin searching"
 				else
-					RESULTS=$(grep -rni --include=*.{txt,md,org} {q} '$FUZPAD_DIR' 2> /dev/null)
+					QUERY={q}
+					RESULTS=$(ls -p '$FUZPAD_DIR' | grep -v "/$" | xargs grep -ni "$QUERY" 2> /dev/null)
 					[ -n "$RESULTS" ] && echo "Found $(echo "$RESULTS" | wc -l) results" || \
 					{ echo "Found 0 results"; exit; }
 					echo "$RESULTS" |
@@ -245,12 +246,12 @@ search_notes(){
 
 open_tags(){
 	while true; do
-		TAG=$(ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | while read -r NOTE; do get_tags "$FUZPAD_DIR/$NOTE" | grep -oE '#[A-Za-z0-9_]+'; done | sort -u | \
+		TAG=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | while read -r NOTE; do get_tags "$FUZPAD_DIR/$NOTE" | grep -oE '#[A-Za-z0-9_]+'; done | sort -u | \
 		fzf --border --border-label="FuzPad" --border-label-pos=0 --layout=reverse --ignore-case --prompt="$(render_icon '📍')Tags > " --highlight-line --padding=0,30%)
 		[[ $? != 0 ]] && break
 		
 		if [[ -n "$TAG" ]]; then		
-			NOTE_DATA=$(ls -R "$FUZPAD_DIR" | grep -E '\.(txt|md|org)$' | while read -r NOTE; do get_tags "$FUZPAD_DIR/$NOTE" | grep -q "$TAG" && echo "$NOTE"; done | \
+			NOTE_DATA=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | while read -r NOTE; do get_tags "$FUZPAD_DIR/$NOTE" | grep -q "$TAG" && echo "$NOTE"; done | \
 			while read -r NOTE; do echo "$(get_title "$FUZPAD_DIR/$NOTE" | sed "s/://g"):$(basename "$FUZPAD_DIR/$NOTE")"; done | \
 			fzf --border --border-label="FuzPad" \
 			--border-label-pos=0 \
