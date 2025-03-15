@@ -124,6 +124,7 @@ open_note(){
 		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
 		--preview='
 			IFS=":" read -r TITLE NOTE <<< {}
+			echo -e "\e[1m$NOTE\e[0m"; echo
 			echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
 			sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain')
 		[[ $? != 0 ]] && break
@@ -143,6 +144,7 @@ delete_notes(){
 	--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
 	--preview='
 		IFS=":" read -r TITLE NOTE <<< {}
+		echo -e "\e[1m$NOTE\e[0m"; echo
 		echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
 		sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain')
 		
@@ -164,6 +166,7 @@ delete_notes(){
 		--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
 		--preview='
 			IFS=":" read -r TITLE NOTE <<< {}
+			echo -e "\e[1m$NOTE\e[0m"; echo
 			echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
 			sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain' | sed -n '1p')
 
@@ -219,14 +222,17 @@ search_notes(){
 					echo -e "\e[1m$NOTE\e[0m"; echo
 					[ "$LINE" -ne $TITLE_LINE ] && echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain && \
 					sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | \
-					sed -e "$(( LINE > 1 ? LINE - 1 : 1 ))s|$(printf "%s" "$QUERY" | sed "s|[&|]|\\&|g")|\x1b[4m&\x1b[0m|gi" | \
-					bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=$(( LINE > 1 ? LINE - 1 : 1 )) \
+					sed -e "$(( LINE > 1 ? LINE - 1 : 1 ))s|$(printf "%s" "$QUERY" | sed "s|[][&]|\\&|g")|\x1b[4m&\x1b[24m|gi" | \
+					sed -E "$(( LINE > 1 ? LINE - 1 : 1 ))s/(.*)/\x1b[47m\1\x1b[0m/" | \
+					bat --color=always --theme='$BAT_THEME' --style=plain --paging=always \
 					--line-range $(( START_LINE > 1 ? START_LINE - 1 : 1 )):$END_LINE && exit
 					
-					echo -e "$TITLE" | sed -e "1s/.*/\x1b[1m&\x1b[0m/" \
-  					-e "1s|$(printf "%s" "$QUERY" | sed "s|[&|]|\\&|g")|\x1b[4m&\x1b[0m\x1b[1m|gi" | \
-					bat --color=always --theme='$BAT_THEME' --style=plain --paging=always --highlight-line=1 && \
-					sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain --line-range 1:$END_LINE
+					echo -e "$TITLE" | \
+					sed -e "1s/.*/\x1b[1m&\x1b[22m/" \
+					-e "1s|$(printf "%s" "$QUERY" | sed "s|[][&]|\\&|g")|\x1b[4m&\x1b[24m\x1b[1m|gi" | \
+					sed -E "1s/(.*)/\x1b[47m\1\x1b[0m/" | \
+					bat --color=always --theme='$BAT_THEME' --style=plain --paging=always && \
+					sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain --line-range 1:$END_LINE 
 				fi')
 		[[ $? != 0 ]] && break
 		
@@ -254,6 +260,7 @@ open_tags(){
 			--preview-window=down:$PREVIEW_SIZE:noinfo:wrap \
 			--preview='
 			IFS=":" read -r TITLE NOTE <<< {}
+			echo -e "\e[1m$NOTE\e[0m"; echo
 			echo -e "\e[1m$TITLE\e[0m" | bat
 			sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain')
 			
