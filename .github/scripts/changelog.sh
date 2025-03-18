@@ -6,6 +6,7 @@ url=$(git remote get-url origin | sed -r 's/(.*)\.git/\1/')
 repo_owner=$(echo "$url" | sed -E 's|.*github.com/([^/]+)/.*|\1|')
 repo_name=$(echo "$url" | sed -E 's|.*github.com/[^/]+/(.*)|\1|')
 
+latest_tag=$(git describe --tags --abbrev=0)
 previous_tag=$(git describe --tags --abbrev=0 HEAD~)
 
 echo "## Changes since $previous_tag"
@@ -26,17 +27,15 @@ do
             "https://api.github.com/repos/$repo_owner/$repo_name/commits?author=$author_email")
 
         github_username=$(echo "$response" | jq -r '.[0].author.login' | grep -v null)
-        github_avatar=$(echo "$response" | jq -r '.[0].author.avatar_url' | grep -v null)
 
         author_to_github[$author_email]="$github_username"
-        github_avatar_urls[$github_username]="$github_avatar"
     else
         github_username="${author_to_github[$author_email]}"
     fi
 
     # Exclude commits starting with "Meta"
     if [[ $summary != Meta* ]]; then
-        echo "* [$summary]($url/commit/$rev) by [$github_username](https://github.com/$github_username)"
+        echo "* $summary by @$github_username in [$rev]($url/commit/$rev)"
 
         # Append commit body indented (blank lines and signoff trailer removed)
         git log $rev~..$rev --format="%b" | sed '/^\s*$/d' | sed '/^Signed-off-by:/d' | \
@@ -49,6 +48,8 @@ do
     fi
 done
 
+echo "[Full Changelog]($url/compare/$previous_tag...$latest_tag)"
+
 # Generate contributor section with profile pictures
 echo "" 
 echo "## Contributors"
@@ -56,10 +57,10 @@ echo ""
 
 for username in "${!github_avatar_urls[@]}"; do
     avatar_url="${github_avatar_urls[$username]}"
-    if [[ -n "$username" && -n "$avatar_url" ]]; then
-        echo "- <img src=\"$avatar_url\" width=\"40\" height=\"40\" style=\"border-radius:50%; vertical-align:middle;\"> [**$username**](https://github.com/$username)"
+    if [[ -n "$username" ]]; then
+        echo "@$username "
     else
-        echo "- *(Unknown Contributor)*"
+        echo "*(Unknown Contributor)*"
     fi
 done
 
