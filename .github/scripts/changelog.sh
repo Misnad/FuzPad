@@ -38,7 +38,8 @@ for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges); d
     fi
 
     if [[ $summary != Meta* ]]; then
-        echo "* $summary by @$github_username in [$rev]($url/commit/$rev)"
+        short_rev="${rev:0:7}"
+        echo "* $summary by @$github_username in [$short_rev]($url/commit/$rev)"
 
         # Append commit body indented (blank lines and signoff trailer removed)
         git log $rev~..$rev --format="%b" | sed '/^\s*$/d' | sed '/^Signed-off-by:/d' | \
@@ -52,7 +53,7 @@ for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges); d
 done
 
 echo ""
-echo "## New Contributors"
+echo "## New Contributors 🚀"
 echo ""
 
 new_contributors=()
