@@ -12,50 +12,41 @@ echo ""
 
 declare -A author_to_github  # Store email-to-GitHub username mapping
 
-# Loop through all commits since previous tag
-for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges)
-do
-    summary=$(git log $rev~..$rev --format="%s")
-    author_email=$(git log $rev~..$rev --format="%aE")
+# Get contributors from all commits before $previous_tag
+previous_contributors=($(git log --format="%aE" $previous_tag --reverse | sort -u))
 
-    # Get GitHub username if not cached
-    if [[ -z "${author_to_github[$author_email]}" ]]; then
-        response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$repo_owner/$repo_name/commits?author=$author_email")
+# Get contributors since the last release
+current_contributors=()
+for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges); do
+    author_email=$(git log -1 --format="%aE" $rev)
+    
+    # Avoid duplicate email processing
+    if [[ ! " ${current_contributors[*]} " =~ " $author_email " ]]; then
+        current_contributors+=("$author_email")
 
-        github_username=$(echo "$response" | jq -r '.[0].author.login' | grep -v null)
+        # Get GitHub username if not cached
+        if [[ -z "${author_to_github[$author_email]}" ]]; then
+            response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                "https://api.github.com/repos/$repo_owner/$repo_name/commits?author=$author_email")
 
-        author_to_github[$author_email]="$github_username"
-    else
-        github_username="${author_to_github[$author_email]}"
-    fi
+            github_username=$(echo "$response" | jq -r '.[0].author.login' | grep -v null)
 
-    # Exclude commits starting with "Meta"
-    if [[ $summary != Meta* ]]; then
-        echo "* $summary by @$github_username in [$rev]($url/commit/$rev)"
-
-        # Append commit body indented (blank lines and signoff trailer removed)
-        git log $rev~..$rev --format="%b" | sed '/^\s*$/d' | sed '/^Signed-off-by:/d' | \
-        while read -r line; do
-            # Escape markdown formatting symbols _ * `
-            echo "  $line" | sed 's/_/\\_/g' | sed 's/`/\\`/g' | sed 's/\*/\\\*/g'
-        done
-
-        release_has_public_changes=true
+            author_to_github[$author_email]="$github_username"
+        fi
     fi
 done
 
-echo ""
 echo "[Full Changelog]($url/compare/$previous_tag...$latest_tag)"
-
-# Generate contributor section
-echo "" 
+echo ""
 echo "## New Contributors"
 echo ""
 
 new_contributors=()
-for github_username in "${author_to_github[@]}"; do
-    if [[ -n "$github_username" && ! " ${new_contributors[*]} " =~ " $github_username " ]]; then
+for author_email in "${current_contributors[@]}"; do
+    github_username="${author_to_github[$author_email]}"
+
+    # Check if truly new (not in previous commits)
+    if [[ -n "$github_username" && ! " ${previous_contributors[*]} " =~ " $author_email " ]]; then
         new_contributors+=("$github_username")
         echo "@$github_username"
     fi
