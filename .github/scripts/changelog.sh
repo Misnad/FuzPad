@@ -14,11 +14,13 @@ for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges)
 do
     summary=$(git log $rev~..$rev --format="%s")
     author=$(git log $rev~..$rev --format="%aN")
+    author_email=$(git log $rev~..$rev --format="%aE")
+    github_username=$(curl -s "https://api.github.com/search/users?q=$author_email" | jq -r '.items[0].login')
     # Exclude commits starting with "Meta"
     if [[ $summary != Meta* ]]
     then
         # Print markdown list of commit headlines
-        echo "* [$summary]($url/commit/$rev) by $author"
+        echo "* [$summary]($url/commit/$rev) by [$github_username](https://github.com/$github_username)"
         # Append commit body indented (blank lines and signoff trailer removed)
         git log $rev~..$rev --format="%b" | sed '/^\s*$/d' | sed '/^Signed-off-by:/d' | \
         while read -r line
