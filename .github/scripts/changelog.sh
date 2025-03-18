@@ -1,7 +1,5 @@
 #!/bin/bash
 
-release_has_public_changes=false
-
 url=$(git remote get-url origin | sed -r 's/(.*)\.git/\1/')
 repo_owner=$(echo "$url" | sed -E 's|.*github.com/([^/]+)/.*|\1|')
 repo_name=$(echo "$url" | sed -E 's|.*github.com/[^/]+/(.*)|\1|')
@@ -13,7 +11,6 @@ echo "## Changes since $previous_tag"
 echo ""
 
 declare -A author_to_github  # Store email-to-GitHub username mapping
-declare -A github_avatar_urls  # Store username-to-avatar mapping
 
 # Loop through all commits since previous tag
 for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges)
@@ -48,21 +45,25 @@ do
     fi
 done
 
+echo ""
 echo "[Full Changelog]($url/compare/$previous_tag...$latest_tag)"
 
-# Generate contributor section with profile pictures
+# Generate contributor section
 echo "" 
-echo "## Contributors"
+echo "## New Contributors"
 echo ""
 
-for username in "${!github_avatar_urls[@]}"; do
-    avatar_url="${github_avatar_urls[$username]}"
-    if [[ -n "$username" ]]; then
-        echo "@$username "
-    else
-        echo "*(Unknown Contributor)*"
+new_contributors=()
+for github_username in "${author_to_github[@]}"; do
+    if [[ -n "$github_username" && ! " ${new_contributors[*]} " =~ " $github_username " ]]; then
+        new_contributors+=("$github_username")
+        echo "@$github_username"
     fi
 done
+
+if [[ ${#new_contributors[@]} -eq 0 ]]; then
+    echo "No new contributors in this release."
+fi
 
 if ! $release_has_public_changes; then
     echo "No public changes since $previous_tag." >&2
