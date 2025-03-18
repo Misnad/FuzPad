@@ -1,5 +1,6 @@
 #!/bin/bash
 release_has_public_changes=false
+
 url=$(git remote get-url origin | sed -r 's/(.*)\.git/\1/')
 repo_owner=$(echo "$url" | sed -E 's|.*github.com/([^/]+)/.*|\1|')
 repo_name=$(echo "$url" | sed -E 's|.*github.com/[^/]+/(.*)|\1|')
@@ -13,7 +14,7 @@ echo ""
 declare -A author_to_github  # Store email-to-GitHub username mapping
 
 # Get contributors from all commits before $previous_tag
-previous_contributors=($(git log --format="%aE" $previous_tag --reverse | sort -u))
+previous_contributors=($(git log --format="%aE" $latest_tag --reverse | sort -u))
 
 # Get contributors since the last release
 current_contributors=()
@@ -32,6 +33,18 @@ for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges); d
             github_username=$(echo "$response" | jq -r '.[0].author.login' | grep -v null)
 
             author_to_github[$author_email]="$github_username"
+        fi
+        if [[ $summary != Meta* ]]; then
+            echo "* $summary by @$github_username in [$rev]($url/commit/$rev)"
+    
+            # Append commit body indented (blank lines and signoff trailer removed)
+            git log $rev~..$rev --format="%b" | sed '/^\s*$/d' | sed '/^Signed-off-by:/d' | \
+            while read -r line; do
+                # Escape markdown formatting symbols _ * `
+                echo "  $line" | sed 's/_/\\_/g' | sed 's/`/\\`/g' | sed 's/\*/\\\*/g'
+            done
+    
+            release_has_public_changes=true
         fi
     fi
 done
