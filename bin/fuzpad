@@ -22,37 +22,38 @@ get_current_date_time() {
 	echo $(date +"$DATE_TIME_FORMAT")
 }
 
+
+list_order() {
+  [ ! "$REVERSE_LIST" = true ] && echo "--tac"
+}
+
+render_icon(){
+	[ "$ICON" -eq 1 ] && echo "$1 "
+}
+
 get_title() {
-  local file="$1"
-  local first_line
-  first_line=$(sed -n '1p' "$file")
-  if [[ $first_line == "#!"* ]]; then
-    sed -n '2p' "$file"
+  local FILE="$1"
+  local FIRST_LINE
+  FIRST_LINE=$(sed -n '1p' "$FILE")
+  if [[ $FIRST_LINE == "#!"* ]]; then
+    sed -n '2p' "$FILE"
   else
-    echo "$first_line"
+    echo "$FIRST_LINE"
   fi
 }
 
 export -f get_title
 
 get_tags() {
-  local file="$1"
-  local first_line
-  first_line=$(sed -n '1p' "$file")
-  if [[ $first_line == "#!"* ]]; then
-    sed -n '3p' "$file"
+  local FILE="$1"
+  local FIRST_LINE
+  FIRST_LINE=$(sed -n '1p' "$FILE")
+  if [[ $FIRST_LINE == "#!"* ]]; then
+    sed -n '3p' "$FILE"
   else
-    sed -n '2p' "$file"
+    sed -n '2p' "$FILE"
   fi
 }
-
-
-# Creates FUZZPAD_DIR if it does not exist.
-if [[ ! -d "$FUZPAD_DIR" ]]; then
-	mkdir -p "$FUZPAD_DIR"
-fi
-
-cd "$FUZPAD_DIR"
 
 auto_git_commit(){
 	if ! command -v git &> /dev/null || [ "$AUTO_GIT" != "1" ]; then
@@ -68,19 +69,15 @@ auto_git_commit(){
 	fi
 }
 
-render_icon(){
-	[ "$ICON" -eq 1 ] && echo "$1 "
-}
-
 show_menu() {
-	ACTIONS=("$(render_icon '📕')New" "$(render_icon '📖')Open" \
+	local ACTIONS=("$(render_icon '📕')New" "$(render_icon '📖')Open" \
 					"$(render_icon '📍')Tags" "$(render_icon '🔎')Search" \
 					"$(render_icon '🔥')Delete" "$(render_icon '❌')Quit")
 	while true; do
 		auto_git_commit &
-		SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --border-label="FuzPad" --border-label-pos=0 \
+		local SELECTED_ACTION=$(printf "%s\n" "${ACTIONS[@]}" | fzf --border --border-label="FuzPad" --border-label-pos=0 \
 		--layout=reverse --highlight-line --padding=0,30%)
-		[[ $? != 0 ]] && break
+		[[ -z $SELECTED_ACTION ]] && break
 		case $SELECTED_ACTION in
 			"$(render_icon '📕')New") 
 				create_new_note ;;
@@ -98,14 +95,10 @@ show_menu() {
 	done
 }
 
-list_order() {
-  [ ! "$REVERSE_LIST" = true ] && echo "--tac"
-}
-
 create_new_note(){
-	NOTE_PREFIX="./$(get_current_date_time)"
+	local NOTE_PREFIX="./$(get_current_date_time)"
 	if [ -f "$NOTE_PREFIX.$TEXT_FORMAT" ]; then
-		N=1
+		local N=1
 		while [ -f "${NOTE_PREFIX}-$N.$TEXT_FORMAT" ]; do ((N++)); done
 		${EDITOR} "${NOTE_PREFIX}-$N.$TEXT_FORMAT"
 		return
@@ -115,7 +108,7 @@ create_new_note(){
 
 open_note(){
 	while true; do
-		NOTE_DATA=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | \
+		local NOTE_DATA=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | \
 		while read -r NOTE; do echo "$(get_title "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border --border-label="FuzPad" \
 		--border-label-pos=0 \
 		--highlight-line \
@@ -127,7 +120,7 @@ open_note(){
 			echo -e "\e[1m$NOTE\e[0m"; echo
 			echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
 			sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain')
-		[[ $? != 0 ]] && break
+		[[ -z $NOTE_DATA ]] && break
 		
 		IFS=":" read -r TITLE NOTE <<< "$NOTE_DATA"
 		${EDITOR} "./$NOTE"
@@ -135,7 +128,7 @@ open_note(){
 }
 
 delete_notes(){
-	NOTES_DATA=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | \
+	local NOTES_DATA=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | \
 	while read -r NOTE; do echo "$(get_title "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | fzf --border --border-label="FuzPad" \
 	--border-label-pos=0 \
 	--highlight-line \
@@ -148,14 +141,14 @@ delete_notes(){
 		echo -e "\e[1m$TITLE\e[0m" | bat --color=always --theme='$BAT_THEME' --style=plain
 		sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain')
 		
-	NOTES=()  
+	local NOTES=()  
 
 	while IFS=":" read -r TITLE NOTE; do
 		NOTES+=("$NOTE") 
 	done <<< "$NOTES_DATA"
 
 	if [[ -n "$NOTES" ]]; then
-		CONFIRMATION=$(printf "%s\n" "${NOTES[@]}" | \
+		local CONFIRMATION=$(printf "%s\n" "${NOTES[@]}" | \
 		sort -n | cut -d ' ' -f2- | \
 		while read -r NOTE; do echo "$(get_title "$NOTE" | sed "s/://g"):$(basename "$NOTE")"; done | \
 		fzf --print-query --border --border-label="FuzPad" \
@@ -180,7 +173,7 @@ delete_notes(){
 
 search_notes(){
 	while true; do
-		SELECTED=$( \
+		local SELECTED=$( \
 			if [[ -z "$LAST_QUERY" ]]; then
 				echo "Enter your query to begin searching"
 			else
@@ -235,9 +228,9 @@ search_notes(){
 					bat --color=always --theme='$BAT_THEME' --style=plain --paging=always && \
 					sed "1{/^#!/ { n; d; }; d; }" "'$FUZPAD_DIR'/$NOTE" | bat --color=always --theme='$BAT_THEME' --style=plain --line-range 1:$END_LINE 
 				fi')
-		[[ $? != 0 ]] && break
+		[[ -z $SELECTED ]] && break
 		
-		LAST_QUERY="$(echo "$SELECTED" | sed -n '1p')"
+		local LAST_QUERY="$(echo "$SELECTED" | sed -n '1p')"
 		IFS=":" read -r CONTENT LINE NOTE <<< $(echo "$SELECTED" | sed -n '2p')
 		${EDITOR} +$LINE "./$NOTE"
 	done
@@ -246,12 +239,12 @@ search_notes(){
 
 open_tags(){
 	while true; do
-		TAG=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | while read -r NOTE; do get_tags "$FUZPAD_DIR/$NOTE" | grep -oE '#[A-Za-z0-9_]+'; done | sort -u | \
+		local TAG=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | while read -r NOTE; do get_tags "$FUZPAD_DIR/$NOTE" | grep -oE '#[A-Za-z0-9_]+'; done | sort -u | \
 		fzf --border --border-label="FuzPad" --border-label-pos=0 --layout=reverse --ignore-case --prompt="$(render_icon '📍')Tags > " --highlight-line --padding=0,30%)
-		[[ $? != 0 ]] && break
+		[[ -z $TAG ]] && break
 		
 		if [[ -n "$TAG" ]]; then		
-			NOTE_DATA=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | while read -r NOTE; do get_tags "$FUZPAD_DIR/$NOTE" | grep -q "$TAG" && echo "$NOTE"; done | \
+			local NOTE_DATA=$(ls -p "$FUZPAD_DIR" | grep -v '/$' | while read -r NOTE; do get_tags "$FUZPAD_DIR/$NOTE" | grep -q "$TAG" && echo "$NOTE"; done | \
 			while read -r NOTE; do echo "$(get_title "$FUZPAD_DIR/$NOTE" | sed "s/://g"):$(basename "$FUZPAD_DIR/$NOTE")"; done | \
 			fzf --border --border-label="FuzPad" \
 			--border-label-pos=0 \
@@ -273,4 +266,11 @@ open_tags(){
 	done
 }
 
+
+# Creates FUZZPAD_DIR if it does not exist.
+if [[ ! -d "$FUZPAD_DIR" ]]; then
+	mkdir -p "$FUZPAD_DIR"
+fi
+
+cd "$FUZPAD_DIR"
 show_menu
