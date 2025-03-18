@@ -12,6 +12,7 @@ echo "## Changes since $previous_tag"
 echo ""
 
 declare -A author_to_github  # Store email-to-GitHub username mapping
+declare -A github_avatar_urls  # Store username-to-avatar mapping
 
 # Loop through all commits since previous tag
 for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges)
@@ -21,11 +22,14 @@ do
 
     # Get GitHub username if not cached
     if [[ -z "${author_to_github[$author_email]}" ]]; then
-        github_username=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$repo_owner/$repo_name/commits?author=$author_email" | \
-            jq -r '.[0].author.login' | grep -v null)
+        response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/$repo_owner/$repo_name/commits?author=$author_email")
+
+        github_username=$(echo "$response" | jq -r '.[0].author.login' | grep -v null)
+        github_avatar=$(echo "$response" | jq -r '.[0].author.avatar_url' | grep -v null)
 
         author_to_github[$author_email]="$github_username"
+        github_avatar_urls[$github_username]="$github_avatar"
     else
         github_username="${author_to_github[$author_email]}"
     fi
@@ -45,17 +49,17 @@ do
     fi
 done
 
-# Generate collaborator mapping at the end of the changelog
+# Generate contributor section with profile pictures
 echo "" 
 echo "## Contributors"
 echo ""
 
-for email in "${!author_to_github[@]}"; do
-    username="${author_to_github[$email]}"
-    if [[ -n "$username" ]]; then
-        echo "- [$username](https://github.com/$username) ($email)"
+for username in "${!github_avatar_urls[@]}"; do
+    avatar_url="${github_avatar_urls[$username]}"
+    if [[ -n "$username" && -n "$avatar_url" ]]; then
+        echo "- <img src=\"$avatar_url\" width=\"40\" height=\"40\" style=\"border-radius:50%; vertical-align:middle;\"> [**$username**](https://github.com/$username)"
     else
-        echo "- *(Unknown GitHub username)* ($email)"
+        echo "- *(Unknown Contributor)*"
     fi
 done
 
