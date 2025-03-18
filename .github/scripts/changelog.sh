@@ -25,7 +25,6 @@ for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges); d
     # Avoid duplicate email processing
     if [[ ! " ${current_contributors[*]} " =~ " $author_email " ]]; then
         current_contributors+=("$author_email")
-
         # Get GitHub username if not cached
         if [[ -z "${author_to_github[$author_email]}" ]]; then
             response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
@@ -35,18 +34,19 @@ for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges); d
 
             author_to_github[$author_email]="$github_username"
         fi
-        if [[ $summary != Meta* ]]; then
-            echo "* $summary by @$github_username in [$rev]($url/commit/$rev)"
-    
-            # Append commit body indented (blank lines and signoff trailer removed)
-            git log $rev~..$rev --format="%b" | sed '/^\s*$/d' | sed '/^Signed-off-by:/d' | \
-            while read -r line; do
-                # Escape markdown formatting symbols _ * `
-                echo "  $line" | sed 's/_/\\_/g' | sed 's/`/\\`/g' | sed 's/\*/\\\*/g'
-            done
-    
-            release_has_public_changes=true
-        fi
+    fi
+
+    if [[ $summary != Meta* ]]; then
+        echo "* $summary by @$github_username in [$rev]($url/commit/$rev)"
+
+        # Append commit body indented (blank lines and signoff trailer removed)
+        git log $rev~..$rev --format="%b" | sed '/^\s*$/d' | sed '/^Signed-off-by:/d' | \
+        while read -r line; do
+            # Escape markdown formatting symbols _ * `
+            echo "  $line" | sed 's/_/\\_/g' | sed 's/`/\\`/g' | sed 's/\*/\\\*/g'
+        done
+
+        release_has_public_changes=true
     fi
 done
 
