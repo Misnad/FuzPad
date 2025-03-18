@@ -1,5 +1,5 @@
 #!/bin/bash
-
+release_has_public_changes=false
 url=$(git remote get-url origin | sed -r 's/(.*)\.git/\1/')
 repo_owner=$(echo "$url" | sed -E 's|.*github.com/([^/]+)/.*|\1|')
 repo_name=$(echo "$url" | sed -E 's|.*github.com/[^/]+/(.*)|\1|')
