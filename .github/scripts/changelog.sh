@@ -9,6 +9,7 @@ latest_tag=$(git describe --tags --abbrev=0)
 previous_tag=$(git describe --tags --abbrev=0 HEAD~)
 
 echo "## Changes since $previous_tag"
+echo "[**Full Changelog**]($url/compare/$previous_tag...$latest_tag)"
 echo ""
 
 declare -A author_to_github  # Store email-to-GitHub username mapping
@@ -50,7 +51,6 @@ for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges); d
     fi
 done
 
-echo "[Full Changelog]($url/compare/$previous_tag...$latest_tag)"
 echo ""
 echo "## New Contributors"
 echo ""
