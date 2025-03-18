@@ -14,11 +14,12 @@ echo ""
 declare -A author_to_github  # Store email-to-GitHub username mapping
 
 # Get contributors from all commits before $previous_tag
-previous_contributors=($(git log --format="%aE" $latest_tag --reverse | sort -u))
+previous_contributors=($(git log --format="%aE" $previous_tag --reverse | sort -u))
 
 # Get contributors since the last release
 current_contributors=()
 for rev in $(git log $previous_tag..HEAD --format="%H" --reverse --no-merges); do
+    summary=$(git log $rev~..$rev --format="%s")
     author_email=$(git log -1 --format="%aE" $rev)
     
     # Avoid duplicate email processing
