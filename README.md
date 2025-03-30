@@ -175,7 +175,7 @@ source ~/.bashrc
 ## Updates
 
 - **Major Updates**: No clear dates at the moment.
-- **Minor Updates**: Released every Monday.
+- **Minor Updates**: No clear dates at the moment.
 - **Patch Updates**: Released as soon as possible.
 
 ## Support
